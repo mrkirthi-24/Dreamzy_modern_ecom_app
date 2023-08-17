@@ -5,14 +5,11 @@ import Container from "@mui/material/Container";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
-import { Box, IconButton, useTheme } from "@mui/material";
-import { ColorModeContext, tokens } from "../theme";
-import { useContext } from "react";
+import { Box, IconButton } from "@mui/material";
+import { useThemeContext } from "../theme/ThemeContextProvider";
 
 function NavBar(): JSX.Element {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const colorMode = useContext(ColorModeContext);
+  const { mode, toggleColorMode } = useThemeContext();
 
   return (
     <AppBar position="static">
@@ -31,12 +28,8 @@ function NavBar(): JSX.Element {
             myAdmin
           </Typography>
           <Box>
-            <IconButton onClick={colorMode.toggleColorMode}>
-              {theme.palette.mode === "dark" ? (
-                <DarkModeOutlined />
-              ) : (
-                <LightModeOutlined />
-              )}
+            <IconButton onClick={toggleColorMode}>
+              {mode === "dark" ? <DarkModeOutlined /> : <LightModeOutlined />}
             </IconButton>
           </Box>
         </Toolbar>
