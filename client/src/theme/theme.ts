@@ -1,4 +1,5 @@
 import { PaletteMode } from "@mui/material";
+import { amber, blueGrey } from "@mui/material/colors";
 
 //mui theme settings
 export const themeSettings = (mode: PaletteMode) => {
@@ -8,24 +9,14 @@ export const themeSettings = (mode: PaletteMode) => {
       ...(mode === "dark"
         ? {
             // palette values for dark mode
-            primary: {
-              main: "#fff",
-            },
-            secondary: {
-              main: "#808080",
-            },
+            primary: blueGrey,
             background: {
-              default: "#27285C",
+              default: "#000000",
             },
           }
         : {
             // palette values for light mode
-            primary: {
-              main: "#f2f229",
-            },
-            secondary: {
-              main: "#808080",
-            },
+            primary: amber,
             background: {
               default: "#fcfcfc",
             },
