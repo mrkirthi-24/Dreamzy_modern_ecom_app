@@ -8,15 +8,16 @@ import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
+  Button,
   FormControl,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   Paper,
-  TextField,
 } from "@mui/material";
 import { useThemeContext } from "../theme/ThemeContextProvider";
+import { Link } from "react-router-dom";
 
 function NavBar(): JSX.Element {
   const { mode, toggleColorMode } = useThemeContext();
@@ -64,6 +65,12 @@ function NavBar(): JSX.Element {
             </FormControl>
           </Paper>
           <Box>
+            <Button>
+              <Link to="/login">Login</Link>
+            </Button>
+            <Button>
+              <Link to="/signup">SignUp</Link>
+            </Button>
             <IconButton onClick={toggleColorMode}>
               {mode === "dark" ? <DarkModeOutlined /> : <LightModeOutlined />}
             </IconButton>

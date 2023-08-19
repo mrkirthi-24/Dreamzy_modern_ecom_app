@@ -1,5 +1,5 @@
 import { PaletteMode } from "@mui/material";
-import { amber, blueGrey } from "@mui/material/colors";
+import { amber, blue } from "@mui/material/colors";
 
 //mui theme settings
 export const themeSettings = (mode: PaletteMode) => {
@@ -9,7 +9,7 @@ export const themeSettings = (mode: PaletteMode) => {
       ...(mode === "dark"
         ? {
             // palette values for dark mode
-            primary: blueGrey,
+            primary: blue,
             background: {
               default: "#000000",
             },
