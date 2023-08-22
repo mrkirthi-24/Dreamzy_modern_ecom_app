@@ -1,49 +1,111 @@
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardMedia,
-  Container,
-  Typography,
-} from "@mui/material";
+import { Button, Container, Grid, Paper, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const authToken = localStorage.getItem("token");
+
   return (
     <Container
       sx={{
         width: "100vw",
         height: "90vh",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
       }}
     >
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        padding="100px"
-      >
-        <Typography variant="h4">
-          Welcome to the world's best ecommerce platform
-        </Typography>
-        <Card>
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="100%"
-              image="https://www.searchenginejournal.com/wp-content/uploads/2020/12/ecommerce-mcommerce-featured-image-5fd09a3a5ff2a.png"
-              alt="ecommerce"
-            />
-          </CardActionArea>
-          {/* <img
-            src=""
-            alt="ecommerce"
+      <Grid container spacing={2} mt={8}>
+        <Grid item xs={4}>
+          <Paper
+            elevation={10}
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              textAlign: "center",
+              alignItems: "center",
+              padding: "10px",
+            }}
+          >
+            <Typography variant="h4" fontWeight={600} fontSize={50}>
+              Welcome to world's best ecommerce platform
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={8}>
+          <img
+            src="https://www.searchenginejournal.com/wp-content/uploads/2020/12/ecommerce-mcommerce-featured-image-5fd09a3a5ff2a.png"
+            alt=""
             width="100%"
             height="100%"
-          /> */}
-        </Card>
-      </Box>
+          />
+        </Grid>
+        {authToken && (
+          <>
+            <Grid item xs={4}>
+              <Paper
+                elevation={8}
+                sx={{ padding: "50px 100px", position: "relative" }}
+                onClick={() => {
+                  navigate("/products");
+                }}
+              >
+                <Button
+                  sx={{
+                    position: "absolute",
+                    right: 0,
+                    bottom: 0,
+                    fontSize: 11,
+                  }}
+                >
+                  Go to Products page
+                </Button>
+              </Paper>
+            </Grid>
+            <Grid item xs={4}>
+              <Paper
+                elevation={8}
+                sx={{ padding: "50px 100px", position: "relative" }}
+                onClick={() => {
+                  navigate("/home");
+                }}
+              >
+                <Button
+                  sx={{
+                    position: "absolute",
+                    right: 0,
+                    bottom: 0,
+                    fontSize: 11,
+                  }}
+                >
+                  Go to Home page
+                </Button>
+              </Paper>
+            </Grid>
+            <Grid item xs={4}>
+              <Paper
+                elevation={8}
+                sx={{ padding: "50px 100px", position: "relative" }}
+                onClick={() => {
+                  navigate("/profile");
+                }}
+              >
+                <Button
+                  sx={{
+                    position: "absolute",
+                    right: 0,
+                    bottom: 0,
+                    fontSize: 11,
+                  }}
+                >
+                  Go to Admin profile
+                </Button>
+              </Paper>
+            </Grid>
+          </>
+        )}
+      </Grid>
     </Container>
   );
 };
