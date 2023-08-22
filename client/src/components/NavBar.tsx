@@ -7,20 +7,31 @@ import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import {
+  Avatar,
   Box,
   Button,
   FormControl,
   IconButton,
   InputAdornment,
   InputLabel,
+  Menu,
+  MenuItem,
   OutlinedInput,
   Paper,
 } from "@mui/material";
 import { useThemeContext } from "../theme/ThemeContextProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function NavBar(): JSX.Element {
   const { mode, toggleColorMode } = useThemeContext();
+  const authToken = localStorage.getItem("token");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("/");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authToken]);
 
   return (
     <AppBar position="static">
@@ -64,20 +75,77 @@ function NavBar(): JSX.Element {
               />
             </FormControl>
           </Paper>
-          <Box>
-            <Button>
-              <Link to="/login">Login</Link>
-            </Button>
-            <Button>
-              <Link to="/signup">SignUp</Link>
-            </Button>
+          <Box display="flex">
             <IconButton onClick={toggleColorMode}>
               {mode === "dark" ? <DarkModeOutlined /> : <LightModeOutlined />}
             </IconButton>
+            {authToken ? (
+              <UserMenu />
+            ) : (
+              <>
+                <Button>
+                  <Link to="/login">Login</Link>
+                </Button>
+                <Button>
+                  <Link to="/signup">SignUp</Link>
+                </Button>
+              </>
+            )}
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
+  );
+}
+
+//Avatar button with Menu
+function UserMenu() {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+  return (
+    <div>
+      <IconButton
+        size="large"
+        aria-label="account of current user"
+        aria-controls="menu-appbar"
+        aria-haspopup="true"
+        onClick={handleMenu}
+        color="inherit"
+      >
+        <Avatar />
+      </IconButton>
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>My Account</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      </Menu>
+    </div>
   );
 }
 

@@ -1,7 +1,6 @@
-import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -12,6 +11,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useThemeContext } from "../theme/ThemeContextProvider";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface CopyrightProps {
   sx?: Record<string, number>;
@@ -32,20 +33,38 @@ const Copyright: React.FC<CopyrightProps> = (props) => {
 
 export default function SignIn() {
   const { mode } = useThemeContext();
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const fetchData = async () => {
+      try {
+        await axios
+          .post("http://localhost:3000/admin/login", {
+            username: email,
+            password: password,
+          })
+          .then((response) => {
+            const data = response.data;
+            if (data.token) localStorage.setItem("token", data.token);
+          })
+          .catch((error) => {
+            throw error;
+          });
+        navigate("/");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   };
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
@@ -68,9 +87,13 @@ export default function SignIn() {
             id="email"
             label="Email Address"
             name="email"
-            autoComplete="email"
+            value={email}
             autoFocus
-            onChange={() => setChecked(false)}
+            autoComplete="email"
+            onChange={(e) => {
+              setChecked(false);
+              setEmail(e.target.value);
+            }}
           />
           <TextField
             margin="normal"
@@ -80,6 +103,8 @@ export default function SignIn() {
             label="Password"
             type="password"
             id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
           />
           <FormControlLabel
