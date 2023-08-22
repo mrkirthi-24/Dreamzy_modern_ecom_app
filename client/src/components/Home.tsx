@@ -6,28 +6,10 @@ const Home = () => {
   const authToken = localStorage.getItem("token");
 
   return (
-    <Container
-      sx={{
-        width: "100vw",
-        height: "90vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <Container sx={ContainerStyles}>
       <Grid container spacing={2} mt={8}>
         <Grid item xs={4}>
-          <Paper
-            elevation={10}
-            sx={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              textAlign: "center",
-              alignItems: "center",
-              padding: "10px",
-            }}
-          >
+          <Paper elevation={10} sx={HeadingStyles}>
             <Typography variant="h4" fontWeight={600} fontSize={50}>
               Welcome to world's best ecommerce platform
             </Typography>
@@ -51,16 +33,7 @@ const Home = () => {
                   navigate("/products");
                 }}
               >
-                <Button
-                  sx={{
-                    position: "absolute",
-                    right: 0,
-                    bottom: 0,
-                    fontSize: 11,
-                  }}
-                >
-                  Go to Products page
-                </Button>
+                <Button sx={ButtonStyles}>Go to Products page</Button>
               </Paper>
             </Grid>
             <Grid item xs={4}>
@@ -71,16 +44,7 @@ const Home = () => {
                   navigate("/home");
                 }}
               >
-                <Button
-                  sx={{
-                    position: "absolute",
-                    right: 0,
-                    bottom: 0,
-                    fontSize: 11,
-                  }}
-                >
-                  Go to Home page
-                </Button>
+                <Button sx={ButtonStyles}>Go to Home page</Button>
               </Paper>
             </Grid>
             <Grid item xs={4}>
@@ -91,16 +55,7 @@ const Home = () => {
                   navigate("/profile");
                 }}
               >
-                <Button
-                  sx={{
-                    position: "absolute",
-                    right: 0,
-                    bottom: 0,
-                    fontSize: 11,
-                  }}
-                >
-                  Go to Admin profile
-                </Button>
+                <Button sx={ButtonStyles}>Go to Admin profile</Button>
               </Paper>
             </Grid>
           </>
@@ -108,6 +63,32 @@ const Home = () => {
       </Grid>
     </Container>
   );
+};
+
+//Component styles
+
+const ContainerStyles = {
+  width: "100vw",
+  height: "90vh",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+};
+
+const HeadingStyles = {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  textAlign: "center",
+  alignItems: "center",
+  padding: "10px",
+};
+
+const ButtonStyles = {
+  position: "absolute",
+  right: 0,
+  bottom: 0,
+  fontSize: 11,
 };
 
 export default Home;
