@@ -40,6 +40,7 @@ export default function SignUp() {
   const [password, setPassword] = React.useState("");
   const navigate = useNavigate();
 
+  //Submit the form
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     const fetchData = async () => {
