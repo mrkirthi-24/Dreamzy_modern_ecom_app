@@ -17,6 +17,7 @@ import ViewProductDetails from "./ViewProductDetails";
 import axios from "axios";
 
 export interface Product {
+  _id: string;
   category: string;
   title: string;
   description: string;
@@ -34,15 +35,14 @@ interface GetProductsProps {
   products: Product[];
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const headers = {
-  Authorization: `Bearer ${localStorage.getItem("token")}`,
-  "Content-Type": "application/json",
-};
-
 const Products = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Content-Type": "application/json",
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -106,8 +106,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const { title, description, imageUrl } = product;
   return (
-    <Card sx={{ maxWidth: 245, marginBottom: 5 }}>
-      <CardMedia sx={{ height: 140 }} image={imageUrl} title={title} />
+    <Card sx={{ minWidth: 250, maxWidth: 250, marginBottom: 5 }}>
+      <CardMedia sx={{ height: 200 }} image={imageUrl} title={title} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}

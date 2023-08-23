@@ -31,7 +31,13 @@ interface EditProductDialogsProps {
 }
 
 export default function EditProductDialogs(props: EditProductDialogsProps) {
+  const { product } = props;
   const [open, setOpen] = React.useState(false);
+  const [category, setCategory] = React.useState(product.category);
+  const [title, setTitle] = React.useState(product.title);
+  const [description, setDescription] = React.useState(product.description);
+  const [quantity, setQuantity] = React.useState(product.quantity);
+  const [imageUrl, setImageUrl] = React.useState(product.imageUrl);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,27 +48,34 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
   };
 
   const handleSubmit = () => {
-    const fetchData = async () => {
+    const editData = async () => {
       try {
-        await axios
-          .post("http://localhost:3000/admin//product/:id", {
-            fullname: firstname + " " + lastname,
-            username: email,
-            password: password,
-          })
+        await axios({
+          method: "PUT",
+          url: `http://localhost:3000/admin//product/${product._id}`,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          data: {
+            category,
+            title,
+            description,
+            quantity,
+            imageUrl,
+          },
+        })
           .then((response) => {
-            const data = response.data;
-            if (data.token) localStorage.setItem("token", data.token);
+            console.log(response.data);
           })
           .catch((error) => {
             throw error;
           });
-        navigate("/");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
+    editData();
   };
 
   return (
@@ -74,7 +87,64 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
         open={open}
       >
         <DialogContent dividers>
-          <EditForm product={props.product} />
+          <Box display="flex">
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  name="category"
+                  required
+                  id="category"
+                  label="Category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  name="quantity"
+                  required
+                  id="quantity"
+                  label="Quantity"
+                  value={quantity.toString()}
+                  onChange={(e) => setQuantity(parseInt(e.target.value))}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="title"
+                  required
+                  fullWidth
+                  id="title"
+                  label="Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="description"
+                  required
+                  fullWidth
+                  id="description"
+                  label="Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="imageUrl"
+                  required
+                  fullWidth
+                  id="imageUrl"
+                  label="Image URL"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
@@ -86,64 +156,3 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
     </div>
   );
 }
-
-interface EditFormProps extends EditProductDialogsProps {}
-
-const EditForm: React.FC<EditFormProps> = ({ product }) => {
-  const { category, title, description, imageUrl, quantity } = product;
-  return (
-    <Box display="flex">
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <TextField
-            name="category"
-            required
-            id="category"
-            label="Category"
-            defaultValue={category}
-            autoFocus
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            name="quantity"
-            required
-            id="quantity"
-            label="Quantity"
-            defaultValue={quantity}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            name="title"
-            required
-            fullWidth
-            id="title"
-            label="Title"
-            defaultValue={title}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            name="description"
-            required
-            fullWidth
-            id="description"
-            label="Description"
-            defaultValue={description}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            name="imageUrl"
-            required
-            fullWidth
-            id="imageUrl"
-            label="Image URL"
-            defaultValue={imageUrl}
-          />
-        </Grid>
-      </Grid>
-    </Box>
-  );
-};
