@@ -5,7 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { Product } from "./Products";
-import { Box, Grid, TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import axios from "axios";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -14,9 +14,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
   "& .MuiDialogActions-root": {
     padding: theme.spacing(1),
-  },
-  "& .MuiGrid-root .MuiGrid-item": {
-    padding: 0,
   },
 }));
 
@@ -87,65 +84,65 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
         open={open}
       >
         <DialogContent dividers>
-          <Box display="flex">
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  name="category"
-                  required
-                  id="category"
-                  label="Category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  type="number"
-                  name="quantity"
-                  required
-                  id="quantity"
-                  label="Quantity"
-                  value={quantity}
-                  onChange={(e) => setQuantity(parseInt(e.target.value))}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="title"
-                  required
-                  fullWidth
-                  id="title"
-                  label="Title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="description"
-                  required
-                  fullWidth
-                  id="description"
-                  label="Description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="imageUrl"
-                  required
-                  fullWidth
-                  id="imageUrl"
-                  label="Image URL"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                />
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="category"
+                required
+                id="category"
+                label="Category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                autoFocus
+              />
             </Grid>
-          </Box>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                type="number"
+                name="quantity"
+                required
+                id="quantity"
+                label="Quantity"
+                value={quantity}
+                onChange={(e) => setQuantity(parseInt(e.target.value))}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="title"
+                required
+                fullWidth
+                id="title"
+                label="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="description"
+                required
+                fullWidth
+                id="description"
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="imageUrl"
+                required
+                fullWidth
+                id="imageUrl"
+                label="Image URL"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+              />
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
