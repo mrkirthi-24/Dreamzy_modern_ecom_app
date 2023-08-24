@@ -52,7 +52,7 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
       try {
         await axios({
           method: "PUT",
-          url: `http://localhost:3000/admin//product/${product._id}`,
+          url: `http://localhost:3000/admin/product/${product._id}`,
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
@@ -102,11 +102,12 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
               </Grid>
               <Grid item xs={6}>
                 <TextField
+                  type="number"
                   name="quantity"
                   required
                   id="quantity"
                   label="Quantity"
-                  value={quantity.toString()}
+                  value={quantity}
                   onChange={(e) => setQuantity(parseInt(e.target.value))}
                 />
               </Grid>

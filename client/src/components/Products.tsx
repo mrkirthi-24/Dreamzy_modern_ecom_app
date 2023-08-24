@@ -9,11 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import EditProductDetails from "./EditProductDetails";
 import ViewProductDetails from "./ViewProductDetails";
+import CreateProduct from "./CreateProduct";
+
 import axios from "axios";
 
 export interface Product {
@@ -63,9 +64,7 @@ const Products = () => {
     <Box>
       <Grid container mt={2} display="flex" justifyContent="flex-end">
         <Grid item xs={2} mr={-2.5}>
-          <Button variant="contained">
-            <AddBoxIcon /> &nbsp; Create Product
-          </Button>
+          <CreateProduct />
         </Grid>
         <Grid item xs={2}>
           <Button

@@ -39,7 +39,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
 //Create Product
 router.post(
-  "/product/create/",
+  "/product/create",
   authenticateJWT,
   (req: Request, res: Response) => {
     const { category, title, description, imageUrl, quantity }: productDetails =
@@ -59,7 +59,7 @@ router.post(
         res.status(200).json(savedProd);
       })
       .catch(() => {
-        res.status(500).json({ error: "Failed to create a new todo" });
+        res.status(500).json({ error: "Failed to create a new product" });
       });
   }
 );
