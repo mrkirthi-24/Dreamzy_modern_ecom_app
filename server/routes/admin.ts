@@ -39,28 +39,32 @@ router.post("/login", async (req: Request, res: Response) => {
 
 //Create Product
 router.post(
-  "/product/create",
+  "/createproduct",
   authenticateJWT,
-  (req: Request, res: Response) => {
-    const { category, title, description, imageUrl, quantity }: productDetails =
-      req.body;
-    const adminId = req.headers["authId"];
-    const newProduct = new Product({
-      category,
-      title,
-      description,
-      imageUrl,
-      quantity,
-      adminId,
-    });
-    newProduct
-      .save()
-      .then((savedProd) => {
-        res.status(200).json(savedProd);
-      })
-      .catch(() => {
-        res.status(500).json({ error: "Failed to create a new product" });
+  async (req: Request, res: Response) => {
+    try {
+      const {
+        category,
+        title,
+        description,
+        imageUrl,
+        quantity,
+      }: productDetails = req.body;
+      const adminId = req.headers["authId"];
+      const newProduct = new Product({
+        category,
+        title,
+        description,
+        imageUrl,
+        quantity,
+        adminId,
       });
+      const savedProd = await newProduct.save();
+      res.status(200).json(savedProd);
+    } catch (error) {
+      console.error("Error saving product:", error);
+      res.status(500).json({ error: "Failed to create a new product" });
+    }
   }
 );
 
@@ -93,5 +97,20 @@ router.put("/product/:id", authenticateJWT, (req: Request, res: Response) => {
         .json({ error: `Failed to update product with id: ${productId}` });
     });
 });
+
+//Delete product
+router.delete(
+  "/product/:productId",
+  authenticateJWT,
+  (req: Request, res: Response) => {
+    const productId = req.params.productId;
+    const adminId = req.headers["authId"];
+    Product.findOneAndDelete({ _id: productId, adminId })
+      .then(() => {
+        res.status(200).json({ message: "Product deleted successfully" });
+      })
+      .catch((error) => res.status(500).json({ error: error.message }));
+  }
+);
 
 export default router;

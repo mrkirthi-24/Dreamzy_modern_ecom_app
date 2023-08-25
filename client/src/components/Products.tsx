@@ -16,6 +16,7 @@ import ViewProductDetails from "./ViewProductDetails";
 import CreateProduct from "./CreateProduct";
 
 import axios from "axios";
+import DeleteProduct from "./DeleteProduct";
 
 export interface Product {
   _id: string;
@@ -105,7 +106,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const { title, description, imageUrl } = product;
   return (
-    <Card sx={{ minWidth: 250, maxWidth: 250, marginBottom: 5 }}>
+    <Card
+      sx={{
+        minWidth: 250,
+        maxWidth: 250,
+        minHeight: 380,
+        marginBottom: 5,
+        position: "relative",
+      }}
+    >
       <CardMedia sx={{ height: 200 }} image={imageUrl} title={title} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -116,9 +125,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </Typography>
       </CardContent>
       {showAction && (
-        <CardActions>
-          <ViewProductDetails product={product} />
-          <EditProductDetails product={product} />
+        <CardActions
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            position: "absolute",
+            width: "100%",
+            bottom: 0,
+            borderTop: "1px solid rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <Box display="flex">
+            <ViewProductDetails product={product} />
+            <EditProductDetails product={product} />
+          </Box>
+          <DeleteProduct productId={product._id} />
         </CardActions>
       )}
     </Card>

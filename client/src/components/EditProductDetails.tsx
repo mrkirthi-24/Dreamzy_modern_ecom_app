@@ -64,12 +64,13 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
         })
           .then((response) => {
             console.log(response.data);
+            handleClose();
           })
           .catch((error) => {
             throw error;
           });
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error editing data:", error);
       }
     };
     editData();

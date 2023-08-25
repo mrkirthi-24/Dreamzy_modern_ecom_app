@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema({
 
 //Product
 const productSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
   category: String,
   title: String,
   description: String,

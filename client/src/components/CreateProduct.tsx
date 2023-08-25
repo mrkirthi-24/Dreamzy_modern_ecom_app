@@ -48,9 +48,8 @@ export default function FullScreenDialog() {
   const handleSubmit = () => {
     const createData = async () => {
       try {
-        await axios({
+        await axios("http://localhost:3000/admin/createproduct", {
           method: "POST",
-          url: `http://localhost:3000/admin/product/create`,
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
@@ -68,7 +67,7 @@ export default function FullScreenDialog() {
             handleClose();
           })
           .catch((error) => {
-            throw error;
+            console.log(error.message);
           });
       } catch (error) {
         console.error("Error sending data:", error);
