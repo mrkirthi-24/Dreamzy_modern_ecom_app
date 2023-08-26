@@ -104,19 +104,33 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   showAction,
 }) => {
-  const { title, description, imageUrl } = product;
+  const { title, description, imageUrl, quantity, category } = product;
   return (
     <Card
       sx={{
         minWidth: 250,
         maxWidth: 250,
-        minHeight: 380,
+        minHeight: 400,
         marginBottom: 5,
         position: "relative",
       }}
     >
       <CardMedia sx={{ height: 200 }} image={imageUrl} title={title} />
       <CardContent>
+        <Typography
+          gutterBottom
+          component="div"
+          fontSize={12}
+          display="flex"
+          justifyContent="space-between"
+        >
+          <span>
+            Category: <b>{category}</b>
+          </span>
+          <span>
+            Qty: <b>{quantity}</b>
+          </span>
+        </Typography>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>

@@ -41,10 +41,10 @@ const Home = () => {
                 elevation={8}
                 sx={{ padding: "50px 100px", position: "relative" }}
                 onClick={() => {
-                  navigate("/home");
+                  navigate("/orders");
                 }}
               >
-                <Button sx={ButtonStyles}>Go to Home page</Button>
+                <Button sx={ButtonStyles}>View Orders</Button>
               </Paper>
             </Grid>
             <Grid item xs={4}>
@@ -55,7 +55,7 @@ const Home = () => {
                   navigate("/profile");
                 }}
               >
-                <Button sx={ButtonStyles}>Go to Admin profile</Button>
+                <Button sx={ButtonStyles}>Update Admin profile</Button>
               </Paper>
             </Grid>
           </>
@@ -65,7 +65,7 @@ const Home = () => {
   );
 };
 
-//Component styles
+//Component styles ----------------------------------------------------------------
 
 const ContainerStyles = {
   width: "100vw",
