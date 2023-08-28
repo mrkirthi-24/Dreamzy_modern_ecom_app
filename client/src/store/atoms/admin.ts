@@ -1,9 +1,13 @@
 import { atom } from "recoil";
 
-export const adminState = atom({
+interface Admin {
+  authToken: string | null;
+  adminEmail: string;
+}
+
+export const adminState = atom<Admin>({
   key: "adminState",
   default: {
-    isLoading: true,
     authToken: "",
     adminEmail: "",
   },

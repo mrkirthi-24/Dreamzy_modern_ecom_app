@@ -7,6 +7,8 @@ import DialogActions from "@mui/material/DialogActions";
 import { Product } from "./Products";
 import { Grid, TextField } from "@mui/material";
 import axios from "axios";
+import { authTokenState } from "../store/selectors/authToken";
+import { useRecoilValue } from "recoil";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -35,6 +37,7 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
   const [description, setDescription] = React.useState(product.description);
   const [quantity, setQuantity] = React.useState(product.quantity);
   const [imageUrl, setImageUrl] = React.useState(product.imageUrl);
+  const authToken = useRecoilValue(authTokenState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,7 +54,7 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
           method: "PUT",
           url: `http://localhost:3000/admin/product/${product._id}`,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
           },
           data: {

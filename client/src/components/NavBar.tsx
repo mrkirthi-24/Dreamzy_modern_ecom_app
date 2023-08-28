@@ -6,6 +6,8 @@ import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import { deepOrange } from "@mui/material/colors";
+
 import {
   Avatar,
   Box,
@@ -21,17 +23,16 @@ import {
 } from "@mui/material";
 import { useThemeContext } from "../theme/ThemeContextProvider";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { authTokenState } from "../store/selectors/authToken";
+import { adminEmailState } from "../store/selectors/adminEmail";
+import { adminState } from "../store/atoms/admin";
 
 function NavBar(): JSX.Element {
   const { mode, toggleColorMode } = useThemeContext();
-  const authToken = localStorage.getItem("token");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate("/");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authToken]);
+  const authToken = useRecoilValue(authTokenState);
+  const adminEmail = useRecoilValue(adminEmailState);
 
   return (
     <AppBar position="static">
@@ -80,7 +81,7 @@ function NavBar(): JSX.Element {
               {mode === "dark" ? <DarkModeOutlined /> : <LightModeOutlined />}
             </IconButton>
             {authToken ? (
-              <UserMenu />
+              <UserMenu email={adminEmail} />
             ) : (
               <>
                 <Button>
@@ -99,8 +100,9 @@ function NavBar(): JSX.Element {
 }
 
 //Avatar button with Menu
-function UserMenu() {
+function UserMenu(props: { email: string | null }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const setAdminState = useSetRecoilState(adminState);
   const navigate = useNavigate();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -112,7 +114,13 @@ function UserMenu() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    setAdminState((prevState) => ({
+      ...prevState,
+      authToken: null,
+      adminEmail: "",
+    }));
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("admin");
     navigate("/");
   };
   return (
@@ -125,7 +133,9 @@ function UserMenu() {
         onClick={handleMenu}
         color="inherit"
       >
-        <Avatar />
+        <Avatar sx={{ bgcolor: deepOrange[500] }}>
+          {props.email ? props.email.charAt(0).toUpperCase() : ""}
+        </Avatar>
       </IconButton>
       <Menu
         id="menu-appbar"

@@ -13,6 +13,8 @@ import Container from "@mui/material/Container";
 import { useThemeContext } from "../theme/ThemeContextProvider";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { adminState } from "../store/atoms/admin";
 
 interface CopyrightProps {
   sx?: Record<string, number>;
@@ -36,6 +38,7 @@ export default function SignIn() {
   const [checked, setChecked] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const setAdminState = useSetRecoilState(adminState);
   const navigate = useNavigate();
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
@@ -49,7 +52,15 @@ export default function SignIn() {
           })
           .then((response) => {
             const data = response.data;
-            if (data.token) localStorage.setItem("token", data.token);
+            if (data.token) {
+              sessionStorage.setItem("token", data.token);
+              sessionStorage.setItem("admin", email);
+              setAdminState((prevState) => ({
+                ...prevState,
+                authToken: data.token,
+                adminEmail: email,
+              }));
+            }
           })
           .catch((error) => {
             throw error;

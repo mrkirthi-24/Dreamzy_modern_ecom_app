@@ -1,9 +1,11 @@
 import { Button, Container, Grid, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { authTokenState } from "../store/selectors/authToken";
 
 const Home = () => {
   const navigate = useNavigate();
-  const authToken = localStorage.getItem("token");
+  const authToken = useRecoilValue(authTokenState);
 
   return (
     <Container sx={ContainerStyles}>

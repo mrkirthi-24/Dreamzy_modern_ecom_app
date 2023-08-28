@@ -13,6 +13,8 @@ import Container from "@mui/material/Container";
 import { useThemeContext } from "../theme/ThemeContextProvider";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useSetRecoilState } from "recoil";
+import { adminState } from "../store/atoms/admin";
 
 interface CopyrightProps {
   sx?: Record<string, number>;
@@ -33,11 +35,13 @@ const Copyright: React.FC<CopyrightProps> = (props) => {
 
 export default function SignUp() {
   const { mode } = useThemeContext();
+
   const [checked, setChecked] = React.useState(true);
   const [firstname, setFirstname] = React.useState("");
   const [lastname, setLastname] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const setAdminState = useSetRecoilState(adminState);
   const navigate = useNavigate();
 
   //Submit the form
@@ -53,7 +57,15 @@ export default function SignUp() {
           })
           .then((response) => {
             const data = response.data;
-            if (data.token) localStorage.setItem("token", data.token);
+            if (data.token) {
+              sessionStorage.setItem("token", data.token);
+              sessionStorage.setItem("admin", email);
+              setAdminState((prevState) => ({
+                ...prevState,
+                authToken: data.token,
+                adminEmail: email,
+              }));
+            }
           })
           .catch((error) => {
             throw error;

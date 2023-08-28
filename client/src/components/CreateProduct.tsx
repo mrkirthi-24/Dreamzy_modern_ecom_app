@@ -18,6 +18,8 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { authTokenState } from "../store/selectors/authToken";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -30,12 +32,12 @@ const Transition = React.forwardRef(function Transition(
 
 export default function FullScreenDialog() {
   const [open, setOpen] = React.useState(false);
-
   const [category, setCategory] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [quantity, setQuantity] = React.useState<number>(0);
   const [imageUrl, setImageUrl] = React.useState("");
+  const authToken = useRecoilValue(authTokenState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,7 +53,7 @@ export default function FullScreenDialog() {
         await axios("http://localhost:3000/admin/createproduct", {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
           },
           data: {

@@ -7,6 +7,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { authTokenState } from "../store/selectors/authToken";
+import { useRecoilValue } from "recoil";
 
 type Props = {
   productId: string;
@@ -14,6 +16,7 @@ type Props = {
 
 const DeleteProduct: React.FC<Props> = ({ productId }) => {
   const [open, setOpen] = React.useState(false);
+  const authToken = useRecoilValue(authTokenState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,7 +33,7 @@ const DeleteProduct: React.FC<Props> = ({ productId }) => {
           method: "DELETE",
           url: `http://localhost:3000/admin/product/${productId}`,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
           },
         })
