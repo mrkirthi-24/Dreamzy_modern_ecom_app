@@ -8,7 +8,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { authTokenState } from "../store/selectors/authToken";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { productsState } from "../store/atoms/products";
 
 type Props = {
   productId: string;
@@ -16,6 +17,7 @@ type Props = {
 
 const DeleteProduct: React.FC<Props> = ({ productId }) => {
   const [open, setOpen] = React.useState(false);
+  const setProductState = useSetRecoilState(productsState);
   const authToken = useRecoilValue(authTokenState);
 
   const handleClickOpen = () => {
@@ -39,6 +41,9 @@ const DeleteProduct: React.FC<Props> = ({ productId }) => {
         })
           .then((response) => {
             console.log(response.data);
+            setProductState(() => ({
+              products: response.data.products,
+            }));
             handleClose();
           })
           .catch((error) => {

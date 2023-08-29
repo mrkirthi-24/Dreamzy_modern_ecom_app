@@ -8,7 +8,8 @@ import { Product } from "./Products";
 import { Grid, TextField } from "@mui/material";
 import axios from "axios";
 import { authTokenState } from "../store/selectors/authToken";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { productsState } from "../store/atoms/products";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -38,6 +39,7 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
   const [quantity, setQuantity] = React.useState(product.quantity);
   const [imageUrl, setImageUrl] = React.useState(product.imageUrl);
   const authToken = useRecoilValue(authTokenState);
+  const setProductState = useSetRecoilState(productsState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -67,6 +69,9 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
         })
           .then((response) => {
             console.log(response.data);
+            setProductState(() => ({
+              products: response.data,
+            }));
             handleClose();
           })
           .catch((error) => {

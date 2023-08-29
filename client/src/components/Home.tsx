@@ -1,4 +1,13 @@
-import { Button, Container, Grid, Paper, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  LinearProgress,
+  Paper,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../store/selectors/authToken";
@@ -6,6 +15,7 @@ import { authTokenState } from "../store/selectors/authToken";
 const Home = () => {
   const navigate = useNavigate();
   const authToken = useRecoilValue(authTokenState);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <Container sx={ContainerStyles}>
@@ -18,11 +28,16 @@ const Home = () => {
           </Paper>
         </Grid>
         <Grid item xs={8}>
+          {!imageLoaded && <LinearProgress color="success" />}
           <img
             src="https://www.searchenginejournal.com/wp-content/uploads/2020/12/ecommerce-mcommerce-featured-image-5fd09a3a5ff2a.png"
             alt=""
             width="100%"
             height="100%"
+            onLoad={() => {
+              setImageLoaded(true);
+            }}
+            style={{ display: imageLoaded ? "block" : "none" }}
           />
         </Grid>
         {authToken && (

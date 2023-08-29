@@ -51,16 +51,21 @@ router.post(
         quantity,
       }: productDetails = req.body;
       const adminId = req.headers["authId"];
-      const newProduct = new Product({
+
+      const newProduct = {
         category,
         title,
         description,
         imageUrl,
         quantity,
         adminId,
-      });
-      const savedProd = await newProduct.save();
-      res.status(200).json(savedProd);
+      };
+      await Product.create(newProduct);
+
+      //get all products
+      const products = await Product.find({ adminId });
+
+      res.status(200).json(products);
     } catch (error) {
       console.error("Error saving product:", error);
       res.status(500).json({ error: "Failed to create a new product" });
@@ -81,35 +86,67 @@ router.get("/products", authenticateJWT, (req: Request, res: Response) => {
 });
 
 //Edit Product
-router.put("/product/:id", authenticateJWT, (req: Request, res: Response) => {
-  const productId = req.params.id;
-  const adminId = req.headers["authId"];
-  const newProduct = req.body;
-  Product.findOneAndUpdate({ _id: productId, adminId }, newProduct, {
-    new: true,
-  })
-    .then((updatedProduct) => {
-      res.status(200).json(updatedProduct);
-    })
-    .catch(() => {
-      res
-        .status(500)
-        .json({ error: `Failed to update product with id: ${productId}` });
-    });
-});
+router.put(
+  "/product/:id",
+  authenticateJWT,
+  async (req: Request, res: Response) => {
+    try {
+      const productId = req.params.id;
+      const adminId = req.headers["authId"];
+      const newProduct = req.body;
+
+      const updatedProduct = await Product.findOneAndUpdate(
+        { _id: productId, adminId },
+        newProduct,
+        {
+          new: true,
+        }
+      );
+      if (!updatedProduct) {
+        return res
+          .status(404)
+          .json({ error: `Product not found with id: ${productId}` });
+      }
+
+      //get all products
+      const products = await Product.find({ adminId });
+      res.status(200).json(products);
+    } catch (error) {
+      console.error("Error updating product:", error);
+      res.status(500).json({ error: `Failed to update product` });
+    }
+  }
+);
 
 //Delete product
 router.delete(
   "/product/:productId",
   authenticateJWT,
-  (req: Request, res: Response) => {
-    const productId = req.params.productId;
-    const adminId = req.headers["authId"];
-    Product.findOneAndDelete({ _id: productId, adminId })
-      .then(() => {
-        res.status(200).json({ message: "Product deleted successfully" });
-      })
-      .catch((error) => res.status(500).json({ error: error.message }));
+  async (req: Request, res: Response) => {
+    try {
+      const productId = req.params.productId;
+      const adminId = req.headers["authId"];
+
+      const deletedProduct = await Product.findOneAndDelete({
+        _id: productId,
+        adminId,
+      });
+
+      if (!deletedProduct) {
+        return res
+          .status(404)
+          .json({ error: `Product not found with id: ${productId}` });
+      }
+
+      const products = await Product.find({ adminId }); // Fetch all products
+
+      res
+        .status(200)
+        .json({ message: "Product deleted successfully", products });
+    } catch (error: any) {
+      console.error("Error deleting product:", error);
+      res.status(500).json({ error: error.message });
+    }
   }
 );
 

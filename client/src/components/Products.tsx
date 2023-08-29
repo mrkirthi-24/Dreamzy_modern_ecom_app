@@ -10,13 +10,15 @@ import {
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import EditProductDetails from "./EditProductDetails";
 import ViewProductDetails from "./ViewProductDetails";
 import CreateProduct from "./CreateProduct";
 
 import axios from "axios";
 import DeleteProduct from "./DeleteProduct";
+import { useRecoilState } from "recoil";
+import { productsState } from "../store/atoms/products";
 
 export interface Product {
   _id: string;
@@ -39,7 +41,7 @@ interface GetProductsProps {
 
 const Products = () => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
+  const [productState, setProductState] = useRecoilState(productsState);
 
   const headers = {
     Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -51,7 +53,9 @@ const Products = () => {
       await axios
         .get("http://localhost:3000/admin/products", { headers })
         .then((response) => {
-          setProducts(response.data);
+          setProductState(() => ({
+            products: response.data,
+          }));
         })
         .catch((error) => {
           console.error(error);
@@ -78,7 +82,7 @@ const Products = () => {
           </Button>
         </Grid>
         <Grid item xs={12} mt={5} display="flex" justifyContent="center">
-          <GetProducts products={products} />
+          <GetProducts products={productState.products} />
         </Grid>
       </Grid>
     </Box>
@@ -106,15 +110,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const { title, description, imageUrl, quantity, category } = product;
   return (
-    <Card
-      sx={{
-        minWidth: 250,
-        maxWidth: 250,
-        minHeight: 400,
-        marginBottom: 5,
-        position: "relative",
-      }}
-    >
+    <Card sx={CardStyles}>
       <CardMedia sx={{ height: 200 }} image={imageUrl} title={title} />
       <CardContent>
         <Typography
@@ -139,16 +135,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </Typography>
       </CardContent>
       {showAction && (
-        <CardActions
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            position: "absolute",
-            width: "100%",
-            bottom: 0,
-            borderTop: "1px solid rgba(0, 0, 0, 0.1)",
-          }}
-        >
+        <CardActions sx={CardActionStyles}>
           <Box display="flex">
             <ViewProductDetails product={product} />
             <EditProductDetails product={product} />
@@ -158,6 +145,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       )}
     </Card>
   );
+};
+
+//Component styles ----------------------------------------------------------------
+
+const CardStyles = {
+  minWidth: 250,
+  maxWidth: 250,
+  minHeight: 400,
+  marginBottom: 5,
+  position: "relative",
+};
+
+const CardActionStyles = {
+  display: "flex",
+  justifyContent: "space-between",
+  position: "absolute",
+  width: "100%",
+  bottom: 0,
+  borderTop: "1px solid rgba(0, 0, 0, 0.1)",
 };
 
 export default Products;

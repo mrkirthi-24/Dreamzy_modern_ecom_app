@@ -18,8 +18,9 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authTokenState } from "../store/selectors/authToken";
+import { productsState } from "../store/atoms/products";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -37,6 +38,7 @@ export default function FullScreenDialog() {
   const [description, setDescription] = React.useState("");
   const [quantity, setQuantity] = React.useState<number>(0);
   const [imageUrl, setImageUrl] = React.useState("");
+  const setProductState = useSetRecoilState(productsState);
   const authToken = useRecoilValue(authTokenState);
 
   const handleClickOpen = () => {
@@ -66,6 +68,9 @@ export default function FullScreenDialog() {
         })
           .then((response) => {
             console.log(response.data);
+            setProductState(() => ({
+              products: response.data,
+            }));
             handleClose();
           })
           .catch((error) => {
