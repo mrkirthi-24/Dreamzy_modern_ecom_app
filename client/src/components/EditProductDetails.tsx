@@ -1,15 +1,15 @@
+import axios from "axios";
 import * as React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import { Product } from "./Products";
 import { Grid, TextField } from "@mui/material";
-import axios from "axios";
 import { authTokenState } from "../store/selectors/authToken";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { productsState } from "../store/atoms/products";
+import { EditProductDialogsProps } from "./types";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -19,16 +19,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
 }));
-
-export interface DialogTitleProps {
-  id: string;
-  children?: React.ReactNode;
-  onClose: () => void;
-}
-
-interface EditProductDialogsProps {
-  product: Product;
-}
 
 export default function EditProductDialogs(props: EditProductDialogsProps) {
   const { product } = props;

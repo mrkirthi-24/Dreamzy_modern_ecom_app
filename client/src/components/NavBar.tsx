@@ -1,13 +1,3 @@
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
-import SearchIcon from "@mui/icons-material/Search";
-import { deepOrange } from "@mui/material/colors";
-
 import {
   Avatar,
   Box,
@@ -21,6 +11,15 @@ import {
   OutlinedInput,
   Paper,
 } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
+import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+import { deepOrange } from "@mui/material/colors";
 import { useThemeContext } from "../theme/ThemeContextProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";

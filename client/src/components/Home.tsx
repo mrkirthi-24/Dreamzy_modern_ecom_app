@@ -1,6 +1,5 @@
 import {
   Button,
-  CircularProgress,
   Container,
   Grid,
   LinearProgress,

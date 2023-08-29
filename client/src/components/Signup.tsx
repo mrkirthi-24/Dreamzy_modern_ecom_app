@@ -15,10 +15,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import { adminState } from "../store/atoms/admin";
-
-interface CopyrightProps {
-  sx?: Record<string, number>;
-}
+import { CopyrightProps } from "./types";
 
 const Copyright: React.FC<CopyrightProps> = (props) => {
   return (

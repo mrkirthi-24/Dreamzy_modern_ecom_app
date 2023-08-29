@@ -19,25 +19,7 @@ import axios from "axios";
 import DeleteProduct from "./DeleteProduct";
 import { useRecoilState } from "recoil";
 import { productsState } from "../store/atoms/products";
-
-export interface Product {
-  _id: string;
-  category: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  quantity: number;
-}
-
-interface ProductCardProps {
-  key?: number;
-  product: Product;
-  showAction?: boolean;
-}
-
-interface GetProductsProps {
-  products: Product[];
-}
+import { GetProductsProps, ProductCardProps } from "./types";
 
 const Products = () => {
   const navigate = useNavigate();

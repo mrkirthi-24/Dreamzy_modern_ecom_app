@@ -8,8 +8,8 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import { Product } from "./Products";
 import { Grid, Paper } from "@mui/material";
+import { CustomizedDialogsProps, DialogTitleProps } from "./types";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -22,16 +22,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: 0,
   },
 }));
-
-export interface DialogTitleProps {
-  id: string;
-  children?: React.ReactNode;
-  onClose: () => void;
-}
-
-interface CustomizedDialogsProps {
-  product: Product;
-}
 
 function BootstrapDialogTitle(props: DialogTitleProps) {
   const { children, onClose, ...other } = props;

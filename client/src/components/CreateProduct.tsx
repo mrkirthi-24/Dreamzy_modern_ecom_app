@@ -114,6 +114,7 @@ export default function FullScreenDialog() {
         </AppBar>
 
         <Box padding={3}>
+          {/* Product Card display */}
           <Box display="flex" justifyContent="center">
             <Card sx={{ minWidth: 250, maxWidth: 250, marginBottom: 4 }}>
               <CardMedia
@@ -146,6 +147,8 @@ export default function FullScreenDialog() {
               </CardContent>
             </Card>
           </Box>
+
+          {/* Enter product details */}
           <Grid container spacing={2} padding="0 50px">
             <Grid item xs={6}>
               <TextField
