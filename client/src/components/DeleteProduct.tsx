@@ -10,6 +10,7 @@ import axios from "axios";
 import { authTokenState } from "../store/selectors/authToken";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { productsState } from "../store/atoms/products";
+import { snackbarState } from "../store/atoms/snackbar";
 
 type Props = {
   productId: string;
@@ -18,6 +19,7 @@ type Props = {
 const DeleteProduct: React.FC<Props> = ({ productId }) => {
   const [open, setOpen] = React.useState(false);
   const setProductState = useSetRecoilState(productsState);
+  const setAlert = useSetRecoilState(snackbarState);
   const authToken = useRecoilValue(authTokenState);
 
   const handleClickOpen = () => {
@@ -43,6 +45,11 @@ const DeleteProduct: React.FC<Props> = ({ productId }) => {
             console.log(response.data);
             setProductState(() => ({
               products: response.data.products,
+            }));
+            setAlert((prevState) => ({
+              ...prevState,
+              open: true,
+              message: "Product deleted successfully",
             }));
             handleClose();
           })

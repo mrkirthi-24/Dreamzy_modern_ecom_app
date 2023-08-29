@@ -2,6 +2,7 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
+import Alert from "./components/Alert";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import NavBar from "./components/NavBar";
@@ -40,6 +41,7 @@ const App = (): JSX.Element => {
             <Route path="/products" element={<Products />} />
             <Route path="*" element={"Error 404: Path Not Found"} />
           </Routes>
+          <Alert />
         </BrowserRouter>
       </ThemeProvider>
     </>

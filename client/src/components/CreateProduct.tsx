@@ -21,6 +21,7 @@ import axios from "axios";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authTokenState } from "../store/selectors/authToken";
 import { productsState } from "../store/atoms/products";
+import { snackbarState } from "../store/atoms/snackbar";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -39,6 +40,7 @@ export default function FullScreenDialog() {
   const [quantity, setQuantity] = React.useState<number>(0);
   const [imageUrl, setImageUrl] = React.useState("");
   const setProductState = useSetRecoilState(productsState);
+  const setAlert = useSetRecoilState(snackbarState);
   const authToken = useRecoilValue(authTokenState);
 
   const handleClickOpen = () => {
@@ -71,7 +73,17 @@ export default function FullScreenDialog() {
             setProductState(() => ({
               products: response.data,
             }));
+            setCategory("");
+            setQuantity(0);
+            setDescription("");
+            setTitle("");
+            setImageUrl("");
             handleClose();
+            setAlert((prevState) => ({
+              ...prevState,
+              open: true,
+              message: "Product created successfully",
+            }));
           })
           .catch((error) => {
             console.log(error.message);

@@ -10,6 +10,7 @@ import { authTokenState } from "../store/selectors/authToken";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { productsState } from "../store/atoms/products";
 import { EditProductDialogsProps } from "./types";
+import { snackbarState } from "../store/atoms/snackbar";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -30,6 +31,7 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
   const [imageUrl, setImageUrl] = React.useState(product.imageUrl);
   const authToken = useRecoilValue(authTokenState);
   const setProductState = useSetRecoilState(productsState);
+  const setAlert = useSetRecoilState(snackbarState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -61,6 +63,11 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
             console.log(response.data);
             setProductState(() => ({
               products: response.data,
+            }));
+            setAlert((prevState) => ({
+              ...prevState,
+              open: true,
+              message: "Product edited successfully",
             }));
             handleClose();
           })
