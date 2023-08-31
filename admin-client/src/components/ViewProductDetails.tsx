@@ -87,9 +87,6 @@ export default function CustomizedDialogs(props: CustomizedDialogsProps) {
               <Paper sx={{ marginBottom: 2 }}>
                 <b>Quantity:</b> {quantity}
               </Paper>
-              <Paper>
-                <b>Material:</b> Cotton
-              </Paper>
             </Grid>
             <Grid
               item

@@ -16,6 +16,7 @@ import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import { adminState } from "../store/atoms/admin";
 import { CopyrightProps } from "./types";
+// import { z } from "zod";
 
 const Copyright: React.FC<CopyrightProps> = (props) => {
   return (
@@ -41,6 +42,23 @@ export default function SignUp() {
   const setAdminState = useSetRecoilState(adminState);
   const navigate = useNavigate();
 
+  // //Zod
+  // const signUpParams = z.object({
+  //   firstname: z.string().min(2).max(25).nonempty(),
+  //   lastname: z.string().min(2).max(25).nonempty(),
+  //   username: z.string().email(),
+  //   password: z.string().min(6),
+  // });
+
+  // type Admin = z.infer<typeof signUpParams>;
+
+  // const signupInput: Admin = {
+  //   firstname: firstname,
+  //   lastname: lastname,
+  //   username: email,
+  //   password: password,
+  // };
+
   //Submit the form
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -51,6 +69,7 @@ export default function SignUp() {
             fullname: firstname + " " + lastname,
             username: email,
             password: password,
+            // signupInput,
           })
           .then((response) => {
             const data = response.data;
