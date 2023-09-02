@@ -2,8 +2,8 @@ import {
   Button,
   Container,
   Grid,
-  LinearProgress,
   Paper,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -27,7 +27,9 @@ const Home = () => {
           </Paper>
         </Grid>
         <Grid item xs={8}>
-          {!imageLoaded && <LinearProgress color="success" />}
+          {!imageLoaded && (
+            <Skeleton variant="rectangular" width="100%" height="100%" />
+          )}
           <img
             src="https://www.searchenginejournal.com/wp-content/uploads/2020/12/ecommerce-mcommerce-featured-image-5fd09a3a5ff2a.png"
             alt=""

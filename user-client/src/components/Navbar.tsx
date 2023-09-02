@@ -91,17 +91,19 @@ export default function PrimarySearchAppBar() {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 }} mb={10}>
       <AppBar position="fixed">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-          >
-            f<AllInclusiveIcon fontSize="large" />
-          </IconButton>
+          <a href="/" style={{ color: "White" }}>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+            >
+              f<AllInclusiveIcon fontSize="large" />
+            </IconButton>
+          </a>
           <Box sx={{ flexGrow: 1 }} />
           <Search>
             <SearchIconWrapper>

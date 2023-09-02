@@ -39,7 +39,7 @@ router.post("/login", async (req: Request, res: Response) => {
 });
 
 //Get Products
-router.get("/products", authenticateJWT, (req: Request, res: Response) => {
+router.get("/products", (req: Request, res: Response) => {
   Product.find()
     .then((products) => {
       res.status(200).json(products);
