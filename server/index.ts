@@ -3,9 +3,11 @@ import mongoose from "mongoose";
 import adminRoute from "./routes/admin";
 import userRoute from "./routes/user";
 import cors from "cors";
+import dotenv from "dotenv";
 const PORT = 3000;
 
 const app = express();
+dotenv.config();
 
 app.use(express.json());
 app.use(cors());
@@ -14,7 +16,13 @@ app.use(cors());
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
 
-mongoose.connect("mongodb://localhost:27017/Ecommerce_App", {
+const URL = process.env.DATABASE_URL;
+
+if (!URL) {
+  throw new Error("DATABASE_URL variable is not defined.");
+}
+
+mongoose.connect(URL, {
   dbName: "Ecommerce_App",
 });
 
