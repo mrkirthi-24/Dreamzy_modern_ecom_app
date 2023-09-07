@@ -1,5 +1,13 @@
 import { atom } from "recoil";
-import { Product } from "../../components/types";
+
+interface Product {
+  _id: string;
+  category: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  quantity: number;
+}
 
 interface ProductState {
   products: Product[];

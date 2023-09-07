@@ -7,7 +7,7 @@ import express, { Request, Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import { Product, User } from "../db";
 import { authenticateJWT, SECRET_KEY } from "../middleware";
-import { userDetails } from "./types";
+import { userDetails } from "../types/types";
 
 const router: Router = Router();
 
@@ -33,7 +33,11 @@ router.post("/login", async (req: Request, res: Response) => {
     const token = jwt.sign({ id: user._id }, SECRET_KEY, {
       expiresIn: "1h",
     });
-    res.json({ message: "User LoggedIn successfully", token });
+    res.json({
+      message: "User LoggedIn successfully",
+      token,
+      firstname: user.fullname?.split(" ")[0],
+    });
   } else
     return res.status(403).json({ message: "Invalid username or password" });
 });

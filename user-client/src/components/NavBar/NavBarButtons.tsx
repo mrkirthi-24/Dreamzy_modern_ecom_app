@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
@@ -14,15 +14,28 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link } from "react-router-dom";
-import { Badge } from "@mui/material";
+import { Badge, Button } from "@mui/material";
+import LoginDialog from "../LoginDialog";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { userFirstNameState } from "../../store/selectors/userFirstName";
+import { authTokenState } from "../../store/selectors/authToken";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { userState } from "../../store/atoms/userState";
+
+interface SignInButtonProps {
+  setOpen: (open: boolean) => void;
+}
 
 const NavBarButtons: React.FC = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <Box display="flex" alignItems="center" ml={5}>
       <SellerButton />
-      <SignInButton />
+      <SignInButton setOpen={setOpen} />
       <CartButton />
       <ToggleMode />
+      <LoginDialog open={open} setOpen={setOpen} />
     </Box>
   );
 };
@@ -38,9 +51,13 @@ const SellerButton: React.FC = () => (
   </StyledLink>
 );
 
-const SignInButton: React.FC = () => {
+const SignInButton: React.FC<SignInButtonProps> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const authToken = useRecoilValue(authTokenState);
+  const userFirstName = useRecoilValue(userFirstNameState);
+  const setUserState = useSetRecoilState(userState);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -48,16 +65,39 @@ const SignInButton: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const handleLogin = () => {
+    props.setOpen(true);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("userToken");
+    sessionStorage.removeItem("user");
+    setUserState(() => ({
+      authToken: "",
+      firstName: "",
+      userEmail: "",
+    }));
+    handleClose();
+  };
+
+  const handleMenuItemClick = () => {
+    if (authToken) {
+      handleClose();
+    } else {
+      handleLogin();
+    }
+  };
+
   return (
     <>
       <StyledLink
         to="/login"
         id="demo-customized-button"
-        onMouseOver={handleClick}
+        onMouseEnter={handleClick}
       >
         <PersonIcon sx={{ mr: 0.5 }} />
         <Typography variant="subtitle1" fontWeight={600} fontSize={16} mt={0.5}>
-          Sign in
+          {authToken ? userFirstName : "Sign in"}
         </Typography>
         <KeyboardArrowDownIcon />
       </StyledLink>
@@ -67,29 +107,52 @@ const SignInButton: React.FC = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
-          New customer? &nbsp;&nbsp;{" "}
-          <Typography variant="subtitle1" fontWeight={900} fontSize={14}>
-            <Link to="/signup">Sign Up</Link>
-          </Typography>
-        </MenuItem>
-        <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
+        {!authToken && (
+          <MenuItem onClick={handleClose} disableRipple>
+            <StyledButton onClick={handleLogin}>
+              New customer?
+              <Typography
+                variant="subtitle1"
+                fontWeight={900}
+                color="blue"
+                ml={4}
+              >
+                Sign Up
+              </Typography>
+            </StyledButton>
+          </MenuItem>
+        )}
+        {!authToken && <Divider sx={{ my: 0.5 }} />}
+        <MenuItem onClick={handleMenuItemClick} disableRipple>
           <PersonIcon />
           My Profile
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleMenuItemClick} disableRipple>
           <LocalShippingIcon />
           Orders
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleMenuItemClick} disableRipple>
           <FavoriteIcon />
           Wishlist
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleMenuItemClick} disableRipple>
           <EmojiEventsIcon />
           Rewards & Gift Cards
         </MenuItem>
+        {authToken && <Divider sx={{ my: 0.5 }} />}
+        {authToken && (
+          <MenuItem onClick={handleLogout} disableRipple>
+            <LogoutIcon />
+            <Typography
+              variant="button"
+              color="error"
+              fontWeight={600}
+              textTransform="none"
+            >
+              Logout
+            </Typography>
+          </MenuItem>
+        )}
       </StyledMenu>
     </>
   );
@@ -113,6 +176,14 @@ const StyledLink = styled(Link)`
   align-items: center;
   color: white;
   margin-right: 25px;
+`;
+
+const StyledButton = styled(Button)`
+  display: flex;
+  color: black;
+  font-size: 16px;
+  align-items: center;
+  text-transform: none;
 `;
 
 const StyledMenu = styled((props: MenuProps) => (

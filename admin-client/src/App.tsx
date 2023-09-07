@@ -14,15 +14,14 @@ import { useThemeContext } from "./theme/ThemeContextProvider";
 const App = (): JSX.Element => {
   const { theme } = useThemeContext();
   const setAdminEmail = useSetRecoilState(adminState);
-  //set admin email for app
+  //Set admin email for app
 
   useEffect(() => {
     const authToken = sessionStorage.getItem("token");
     const adminEmail = sessionStorage.getItem("admin");
     const validAdminEmail = adminEmail || "";
 
-    setAdminEmail((prevState) => ({
-      ...prevState,
+    setAdminEmail(() => ({
       authToken,
       adminEmail: validAdminEmail,
     }));

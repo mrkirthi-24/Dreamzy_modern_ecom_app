@@ -6,7 +6,7 @@ import express, { Request, Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import { Admin, Product } from "../db";
 import { authenticateJWT, SECRET_KEY } from "../middleware";
-import { adminDetails, productDetails } from "./types";
+import { adminDetails, productDetails } from "../types/types";
 
 const router: Router = Router();
 
