@@ -1,6 +1,9 @@
 import { Box, Button, CircularProgress, styled } from "@mui/material";
 import { ShoppingCart as Cart, FlashOn as Flash } from "@mui/icons-material";
 import { Product } from "../../store/atoms/productState";
+import { useRecoilState } from "recoil";
+import { cartState } from "../../store/atoms/cartState";
+import axios from "axios";
 
 interface ItemActionsProps {
   loading: boolean;
@@ -8,6 +11,24 @@ interface ItemActionsProps {
 }
 
 const ItemActions: React.FC<ItemActionsProps> = ({ item, loading }) => {
+  const [cart, setCart] = useRecoilState(cartState);
+
+  const handleAddCart = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/user/product/${item?._id}`
+      );
+      const updatedCart = [...cart.products, response.data[0]];
+      setCart(() => ({
+        products: updatedCart,
+      }));
+      // Store the updated cart in sessionStorage
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <LeftContainer>
       {loading ? <CircularProgress /> : <Image src={item?.imageUrl} />}
@@ -15,6 +36,7 @@ const ItemActions: React.FC<ItemActionsProps> = ({ item, loading }) => {
       <StyledButton
         style={{ marginRight: 10, background: "#ff9f00" }}
         variant="contained"
+        onClick={handleAddCart}
       >
         <Cart />
         Add to Cart

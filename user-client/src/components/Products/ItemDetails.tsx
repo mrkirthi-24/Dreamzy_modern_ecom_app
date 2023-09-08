@@ -1,5 +1,6 @@
 import {
   Box,
+  Link,
   styled,
   Table,
   TableBody,
@@ -9,7 +10,7 @@ import {
 } from "@mui/material";
 import { Product } from "../../store/atoms/productState";
 import { LocalOffer as Badge } from "@mui/icons-material";
-
+import GradeIcon from "@mui/icons-material/Grade";
 interface ItemDetailsProps {
   item: Product | null;
 }
@@ -21,8 +22,31 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
   return (
     <Box padding={5}>
       <Typography variant="h5">{item?.title}</Typography>
-      <Typography style={{ marginTop: 5, color: "#878787", fontSize: 14 }}>
-        8 Ratings & 1 Reviews
+      <Typography style={{ marginTop: 5 }}>
+        <Link
+          href="#"
+          color="#fff"
+          sx={{ textDecoration: "none", display: "flex" }}
+        >
+          <Box
+            component="span"
+            bgcolor="green"
+            padding="1px 5px"
+            borderRadius="4px"
+            fontSize="12px"
+            display="flex"
+            alignItems="center"
+            fontWeight={900}
+          >
+            4.3&nbsp;
+            <span style={{ fontSize: "14px", marginTop: 2 }}>
+              <GradeIcon fontSize="inherit" />
+            </span>
+          </Box>
+          <Box component="span" color="black" fontSize="14px">
+            &nbsp;&nbsp;8 Ratings & 1 Reviews
+          </Box>
+        </Link>
       </Typography>
       <Typography mt={2}>
         <span style={{ fontSize: 28, fontWeight: 900 }}>₹6000</span>

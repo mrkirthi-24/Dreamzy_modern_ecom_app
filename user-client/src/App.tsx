@@ -8,14 +8,17 @@ import Navbar from "./components/NavBar/Navbar";
 import ProductDetails from "./components/Products/ProductDetails";
 import Products from "./components/Products/Products";
 import SellerPage from "./components/SellerPage";
+import { cartState } from "./store/atoms/cartState";
 import { userState } from "./store/atoms/userState";
 
 const App: React.FC = () => {
   const setUserState = useSetRecoilState(userState);
+  const setCartState = useSetRecoilState(cartState);
 
   React.useEffect(() => {
     const authToken = sessionStorage.getItem("userToken");
     const firstName = sessionStorage.getItem("user");
+    const updateCart = sessionStorage.getItem("cart");
     const validfirstName = firstName || "";
 
     setUserState((prevState) => ({
@@ -23,7 +26,13 @@ const App: React.FC = () => {
       authToken,
       firstName: validfirstName,
     }));
-  }, [setUserState]);
+
+    if (updateCart !== null) {
+      setCartState(() => ({
+        products: JSON.parse(updateCart),
+      }));
+    }
+  }, [setUserState, setCartState]);
 
   return (
     <>
