@@ -85,6 +85,7 @@ const SignInButton: React.FC<SignInButtonProps> = (props) => {
       handleClose();
     } else {
       handleLogin();
+      handleClose();
     }
   };
 

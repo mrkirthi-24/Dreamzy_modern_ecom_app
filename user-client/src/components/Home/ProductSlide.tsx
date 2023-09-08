@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { productsState } from "../../store/atoms/productState";
+import { productState } from "../../store/atoms/productState";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ interface ProductSlideProps {
 }
 
 const ProductSlide: React.FC<ProductSlideProps> = ({ title, timer }) => {
-  const [productState, setProductState] = useRecoilState(productsState);
+  const [allproductState, setProductState] = useRecoilState(productState);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -88,7 +88,7 @@ const ProductSlide: React.FC<ProductSlideProps> = ({ title, timer }) => {
         dotListClass="custom-dot-list-style"
         itemClass="carousel-item-padding-40-px"
       >
-        {productState.products.map((product) => (
+        {allproductState.products.map((product) => (
           <Link
             key={product._id}
             to={`product/${product._id}`}

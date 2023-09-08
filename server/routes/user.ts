@@ -53,6 +53,20 @@ router.get("/products", (req: Request, res: Response) => {
     });
 });
 
+//Get Product with productId
+router.get("/product/:productId", (req: Request, res: Response) => {
+  const prodId = req.params.productId;
+  Product.find({ _id: prodId })
+    .then((product) => {
+      res.status(200).json(product);
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .json({ error: "Failed to retrieve product with id:" + prodId });
+    });
+});
+
 // Wishlist Product
 router.post(
   "/product/wishlist/:productId",

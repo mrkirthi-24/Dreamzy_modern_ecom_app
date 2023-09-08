@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-interface Product {
+export interface Product {
   _id: string;
   category: string;
   title: string;
@@ -13,7 +13,7 @@ interface ProductState {
   products: Product[];
 }
 
-export const productsState = atom<ProductState>({
+export const productState = atom<ProductState>({
   key: "productState",
   default: {
     products: [],
