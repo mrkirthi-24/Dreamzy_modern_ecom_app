@@ -5,13 +5,13 @@ import { Box, Link, Stack, Typography } from "@mui/material";
 const Footer: React.FC = () => {
   return (
     <Box bgcolor="#232f3e" pb={1} color="white">
-      <Box bgcolor="#3f546f" textAlign="center" padding="18px 0">
-        <Typography variant="subtitle2" fontWeight={600}>
-          <Link href="#" underline="none" color="white">
+      <Link href="#" underline="none" color="white">
+        <Box bgcolor="#3f546f" textAlign="center" padding="18px 0">
+          <Typography variant="subtitle1" fontWeight={600}>
             Back to top
-          </Link>
-        </Typography>
-      </Box>
+          </Typography>
+        </Box>
+      </Link>
       <Stack
         spacing={20}
         padding={2}

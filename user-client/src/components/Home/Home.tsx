@@ -8,9 +8,9 @@ const Home: React.FC = () => {
     <Box margin={2}>
       <HomeNavIcons />
       <Banner />
-      <ProductSlide title="Deals of the Day" timer={true}/>
-      <ProductSlide title="Latest Trends" timer={false}/>
-      <ProductSlide title="Recommended for you" timer={false}/>
+      <ProductSlide title="Deals of the Day" timer={true} />
+      <ProductSlide title="Latest Trends 😍" timer={false} />
+      <ProductSlide title="Recommended for you" timer={false} />
     </Box>
   );
 };
