@@ -34,8 +34,13 @@ const productSchema = new mongoose.Schema({
   title: String,
   description: String,
   imageUrl: String,
+  mrp: Number,
+  sell: Number,
   quantity: Number,
-  adminId: String,
+  adminId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Admin",
+  },
 });
 
 export const Admin = mongoose.model("admins", adminSchema);

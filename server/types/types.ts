@@ -22,5 +22,7 @@ export interface productDetails {
   title: string;
   description?: string;
   imageUrl: string;
+  mrp: number;
+  sell: number;
   quantity: number;
 }

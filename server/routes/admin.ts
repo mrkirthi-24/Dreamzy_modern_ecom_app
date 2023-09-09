@@ -48,6 +48,8 @@ router.post(
         title,
         description,
         imageUrl,
+        mrp,
+        sell,
         quantity,
       }: productDetails = req.body;
       const adminId = req.headers["authId"];
@@ -57,6 +59,8 @@ router.post(
         title,
         description,
         imageUrl,
+        mrp,
+        sell,
         quantity,
         adminId,
       };
