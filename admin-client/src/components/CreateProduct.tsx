@@ -1,4 +1,4 @@
-import * as React from "react";
+import { ChangeEvent, forwardRef, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
@@ -15,6 +15,7 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  InputAdornment,
   TextField,
 } from "@mui/material";
 import axios from "axios";
@@ -23,7 +24,7 @@ import { authTokenState } from "../store/selectors/authToken";
 import { productsState } from "../store/atoms/products";
 import { snackbarState } from "../store/atoms/snackbar";
 
-const Transition = React.forwardRef(function Transition(
+const Transition = forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
   },
@@ -32,16 +33,35 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog() {
-  const [open, setOpen] = React.useState(false);
-  const [category, setCategory] = React.useState("");
-  const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [quantity, setQuantity] = React.useState<number>(0);
-  const [imageUrl, setImageUrl] = React.useState("");
+const productInitialValues = {
+  category: "",
+  title: "",
+  description: "",
+  imageUrl: "",
+  mrp: 0,
+  sell: 0,
+  quantity: 0,
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function calculateDiscount(mrp: number, sell: number) {
+  if (mrp === 0 || sell === 0) return 0;
+  const discount = (mrp - sell) / mrp;
+  return Math.round(discount * 100);
+}
+
+const CreateProductDialog: React.FC = () => {
+  const [open, setOpen] = useState(false);
+  const [productDetails, setProductDetails] = useState(productInitialValues);
   const setProductState = useSetRecoilState(productsState);
   const setAlert = useSetRecoilState(snackbarState);
   const authToken = useRecoilValue(authTokenState);
+
+  const onInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,24 +80,13 @@ export default function FullScreenDialog() {
             Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
           },
-          data: {
-            category,
-            title,
-            description,
-            quantity,
-            imageUrl,
-          },
+          data: { ...productDetails },
         })
           .then((response) => {
-            console.log(response.data);
             setProductState(() => ({
               products: response.data,
             }));
-            setCategory("");
-            setQuantity(0);
-            setDescription("");
-            setTitle("");
-            setImageUrl("");
+            setProductDetails(productInitialValues);
             handleClose();
             setAlert((prevState) => ({
               ...prevState,
@@ -131,9 +140,9 @@ export default function FullScreenDialog() {
             <Card sx={{ minWidth: 250, maxWidth: 250, marginBottom: 4 }}>
               <CardMedia
                 component="img"
-                alt={title}
+                alt={productDetails.title}
                 height="200"
-                image={imageUrl}
+                image={productDetails.imageUrl}
               />
               <CardContent>
                 <Typography
@@ -144,37 +153,74 @@ export default function FullScreenDialog() {
                   justifyContent="space-between"
                 >
                   <span>
-                    Category: <b>{category}</b>
+                    Category:
+                    <b>
+                      {productDetails.category.length > 10
+                        ? productDetails.category.substring(0, 10) + "..."
+                        : productDetails.category}
+                    </b>
                   </span>
-                  <span>
-                    Qty: <b>{quantity}</b>
-                  </span>
+                  <Box display="flex" flexDirection="column">
+                    <span>
+                      Qty: <b>{productDetails.quantity}</b>
+                    </span>
+                  </Box>
                 </Typography>
-                <Typography gutterBottom variant="h5" component="div">
-                  {title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {description}
-                </Typography>
+                <Box>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {productDetails.title.length > 21
+                      ? productDetails.title.substring(0, 21) + "..."
+                      : productDetails.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {productDetails.description.length > 35
+                      ? productDetails.description.substring(0, 35) + "..."
+                      : productDetails.description}
+                  </Typography>
+                  <Typography
+                    gutterBottom
+                    variant="body2"
+                    mt={2}
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    <span>
+                      MRP: ₹<b>{productDetails.mrp}</b>
+                    </span>
+                    &nbsp;{" "}
+                    <span>
+                      Sell: ₹<b>{productDetails.sell}</b>
+                    </span>
+                  </Typography>
+                  <Typography fontSize={10} color="green">
+                    Discount:&nbsp;
+                    <b>
+                      {calculateDiscount(
+                        productDetails.mrp,
+                        productDetails.sell
+                      )}
+                    </b>
+                    %
+                  </Typography>
+                </Box>
               </CardContent>
             </Card>
           </Box>
 
           {/* Enter product details */}
           <Grid container spacing={2} padding="0 50px">
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <TextField
                 fullWidth
                 name="category"
                 required
                 id="category"
                 label="Category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => onInputChange(e)}
                 autoFocus
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <TextField
                 fullWidth
                 type="number"
@@ -182,8 +228,39 @@ export default function FullScreenDialog() {
                 required
                 id="quantity"
                 label="Quantity"
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value))}
+                onChange={(e) => onInputChange(e)}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <TextField
+                fullWidth
+                type="number"
+                name="mrp"
+                required
+                id="mrp"
+                label="MRP"
+                onChange={(e) => onInputChange(e)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">₹</InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <TextField
+                fullWidth
+                type="number"
+                name="sell"
+                required
+                id="sell"
+                label="Sell Price"
+                onChange={(e) => onInputChange(e)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">₹</InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -193,8 +270,7 @@ export default function FullScreenDialog() {
                 fullWidth
                 id="title"
                 label="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => onInputChange(e)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -204,8 +280,7 @@ export default function FullScreenDialog() {
                 fullWidth
                 id="description"
                 label="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => onInputChange(e)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -215,8 +290,7 @@ export default function FullScreenDialog() {
                 fullWidth
                 id="imageUrl"
                 label="Image URL"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
+                onChange={(e) => onInputChange(e)}
               />
             </Grid>
           </Grid>
@@ -224,4 +298,6 @@ export default function FullScreenDialog() {
       </Dialog>
     </div>
   );
-}
+};
+
+export default CreateProductDialog;

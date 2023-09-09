@@ -11,9 +11,9 @@ import {
 import HomeIcon from "@mui/icons-material/Home";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import EditProductDetails from "./EditProductDetails";
+import EditProductDialog from "./EditProductDetails";
 import ViewProductDetails from "./ViewProductDetails";
-import CreateProduct from "./CreateProduct";
+import CreateProductDialog, { calculateDiscount } from "./CreateProduct";
 
 import axios from "axios";
 import DeleteProduct from "./DeleteProduct";
@@ -51,7 +51,7 @@ const Products = () => {
     <Box>
       <Grid container mt={2} display="flex" justifyContent="flex-end">
         <Grid item xs={2} mr={-2.5}>
-          <CreateProduct />
+          <CreateProductDialog />
         </Grid>
         <Grid item xs={2}>
           <Button
@@ -90,7 +90,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   showAction,
 }) => {
-  const { title, description, imageUrl, quantity, category } = product;
+  const { title, description, imageUrl, quantity, category, mrp, sell } =
+    product;
   return (
     <Card sx={CardStyles}>
       <CardMedia sx={{ height: 200 }} image={imageUrl} title={title} />
@@ -115,12 +116,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          display="flex"
+          justifyContent="space-between"
+          mt={1}
+          mb={5}
+        >
+          <span>
+            MRP: ₹<b>{mrp}</b>
+          </span>
+          <span>
+            Sell Price: ₹<b>{sell}</b>
+          </span>
+          <span style={{ color: "green" }}>
+            Discount: {calculateDiscount(mrp, sell)}%
+          </span>
+        </Typography>
       </CardContent>
       {showAction && (
         <CardActions sx={CardActionStyles}>
           <Box display="flex">
             <ViewProductDetails product={product} />
-            <EditProductDetails product={product} />
+            <EditProductDialog product={product} />
           </Box>
           <DeleteProduct productId={product._id} />
         </CardActions>

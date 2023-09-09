@@ -5,12 +5,13 @@ import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import { Grid, TextField } from "@mui/material";
+import { Grid, TextField, Typography } from "@mui/material";
 import { authTokenState } from "../store/selectors/authToken";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { productsState } from "../store/atoms/products";
 import { EditProductDialogsProps } from "./types";
 import { snackbarState } from "../store/atoms/snackbar";
+import { calculateDiscount } from "./CreateProduct";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -21,17 +22,28 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function EditProductDialogs(props: EditProductDialogsProps) {
-  const { product } = props;
+const EditProductDialog: React.FC<EditProductDialogsProps> = ({ product }) => {
+  const productInitialValues = {
+    category: product.category,
+    title: product.title,
+    description: product.description,
+    imageUrl: product.imageUrl,
+    mrp: product.mrp,
+    sell: product.sell,
+    quantity: product.quantity,
+  };
+
   const [open, setOpen] = React.useState(false);
-  const [category, setCategory] = React.useState(product.category);
-  const [title, setTitle] = React.useState(product.title);
-  const [description, setDescription] = React.useState(product.description);
-  const [quantity, setQuantity] = React.useState(product.quantity);
-  const [imageUrl, setImageUrl] = React.useState(product.imageUrl);
+  const [editProduct, setEditProduct] = React.useState(productInitialValues);
   const authToken = useRecoilValue(authTokenState);
   const setProductState = useSetRecoilState(productsState);
   const setAlert = useSetRecoilState(snackbarState);
+
+  const onInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setEditProduct({ ...editProduct, [e.target.name]: e.target.value });
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,13 +63,7 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
             Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
           },
-          data: {
-            category,
-            title,
-            description,
-            quantity,
-            imageUrl,
-          },
+          data: { ...editProduct },
         })
           .then((response) => {
             console.log(response.data);
@@ -98,8 +104,8 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
                 required
                 id="category"
                 label="Category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                value={editProduct.category}
+                onChange={(e) => onInputChange(e)}
                 autoFocus
               />
             </Grid>
@@ -111,9 +117,44 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
                 required
                 id="quantity"
                 label="Quantity"
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value))}
+                value={editProduct.quantity}
+                onChange={(e) => onInputChange(e)}
               />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                type="number"
+                name="mrp"
+                required
+                id="mrp"
+                label="MRP"
+                value={editProduct.mrp}
+                onChange={(e) => onInputChange(e)}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                type="number"
+                name="sell"
+                required
+                id="sell"
+                label="Sell Price"
+                value={editProduct.sell}
+                onChange={(e) => onInputChange(e)}
+              />
+            </Grid>
+            <Grid item xs={4} mt={0.3}>
+              <Typography
+                width="100%"
+                color="green"
+                border="1px dashed grey"
+                padding={1.6}
+              >
+                Discount: {calculateDiscount(editProduct.mrp, editProduct.sell)}
+                %
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -122,8 +163,8 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
                 fullWidth
                 id="title"
                 label="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={editProduct.title}
+                onChange={(e) => onInputChange(e)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -133,8 +174,8 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
                 fullWidth
                 id="description"
                 label="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={editProduct.description}
+                onChange={(e) => onInputChange(e)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -144,8 +185,8 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
                 fullWidth
                 id="imageUrl"
                 label="Image URL"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
+                value={editProduct.imageUrl}
+                onChange={(e) => onInputChange(e)}
               />
             </Grid>
           </Grid>
@@ -159,4 +200,6 @@ export default function EditProductDialogs(props: EditProductDialogsProps) {
       </BootstrapDialog>
     </div>
   );
-}
+};
+
+export default EditProductDialog;
