@@ -3,7 +3,6 @@ import { ShoppingCart as Cart, FlashOn as Flash } from "@mui/icons-material";
 import { Product } from "../../store/atoms/productState";
 import { useRecoilState } from "recoil";
 import { cartState } from "../../store/atoms/cartState";
-import axios from "axios";
 
 interface ItemActionsProps {
   loading: boolean;
@@ -15,15 +14,20 @@ const ItemActions: React.FC<ItemActionsProps> = ({ item, loading }) => {
 
   const handleAddCart = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/user/product/${item?._id}`
+      const existingProduct = cart.products.find(
+        (product) => product?._id === item?._id
       );
-      const updatedCart = [...cart.products, response.data[0]];
-      setCart(() => ({
-        products: updatedCart,
-      }));
-      // Store the updated cart in sessionStorage
-      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+
+      if (!existingProduct) {
+        if (item != null) {
+          const updatedCart = [...cart.products, item];
+          setCart(() => ({
+            products: updatedCart,
+          }));
+          // Store the updated cart in sessionStorage
+          sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+        }
+      }
     } catch (error) {
       console.log(error);
     }

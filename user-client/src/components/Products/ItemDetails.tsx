@@ -18,6 +18,7 @@ interface ItemDetailsProps {
 const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
   const adURL =
     "https://rukminim1.flixcart.com/lockin/774/185/images/CCO__PP_2019-07-14.png?q=50";
+
   const date = new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000);
   return (
     <Box padding={5}>
@@ -49,13 +50,15 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
         </Link>
       </Typography>
       <Typography mt={2}>
-        <span style={{ fontSize: 28, fontWeight: 900 }}>₹6000</span>
+        <span style={{ fontSize: 28, fontWeight: 900 }}>₹{item?.sell}</span>
         &nbsp;&nbsp;&nbsp;
         <span style={{ color: "#878787", textDecoration: "line-through" }}>
-          ₹9000
+          ₹{item?.mrp}
         </span>
         &nbsp;&nbsp;&nbsp;
-        <span style={{ color: "#388E3C", fontWeight: 600 }}>30% OFF</span>
+        <span style={{ color: "#388E3C", fontWeight: 600 }}>
+          {item && Math.round(((item.mrp - item.sell) / item.mrp) * 100)}% OFF
+        </span>
       </Typography>
 
       <Typography>Available offers</Typography>

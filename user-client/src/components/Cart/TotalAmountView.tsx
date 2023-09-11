@@ -15,11 +15,11 @@ const TotalAmountView: React.FC<TotalAmountViewProps> = ({ cartItems }) => {
       <Container>
         <Typography>
           Price ({cartItems?.length} items)
-          <Price>₹6000</Price>
+          <Price>00000</Price>
         </Typography>
         <Typography>
           Discount
-          <Price>-₹3000</Price>
+          <Price>000</Price>
         </Typography>
         <Typography>
           Delivery Charges

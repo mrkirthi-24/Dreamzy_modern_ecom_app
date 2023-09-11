@@ -36,9 +36,11 @@ const MyCartItems: React.FC<MyCartItemsProps> = ({ cartItems }) => {
               <SmallText>{item.description}</SmallText>
               <SmallText>Seller: Nexus Exports</SmallText>
               <Box mt={2} display="flex" alignItems="baseline">
-                <MRP>₹6,000</MRP>
-                <DiscountPrice>₹3,000</DiscountPrice>
-                <Discount>50% OFF</Discount>
+                <MRP>₹{item.mrp}</MRP>
+                <SellPrice>₹{item.sell}</SellPrice>
+                <Discount>
+                  {Math.round(((item.mrp - item.sell) / item.mrp) * 100)}% OFF
+                </Discount>
                 <Discount>
                   4 offers applied &nbsp;
                   <InfoIcon fontSize="inherit" />
@@ -84,7 +86,7 @@ const MRP = styled(Typography)`
   margin-right: 10px;
 `;
 
-const DiscountPrice = styled(Typography)`
+const SellPrice = styled(Typography)`
   font-size: 18px;
   font-weight: 600;
   margin-right: 10px;

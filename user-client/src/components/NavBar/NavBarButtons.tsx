@@ -21,6 +21,7 @@ import { userFirstNameState } from "../../store/selectors/userFirstName";
 import { authTokenState } from "../../store/selectors/authToken";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { userState } from "../../store/atoms/userState";
+import { cartState } from "../../store/atoms/cartState";
 
 interface SignInButtonProps {
   setOpen: (open: boolean) => void;
@@ -57,6 +58,7 @@ const SignInButton: React.FC<SignInButtonProps> = (props) => {
   const authToken = useRecoilValue(authTokenState);
   const userFirstName = useRecoilValue(userFirstNameState);
   const setUserState = useSetRecoilState(userState);
+  const setCartState = useSetRecoilState(cartState);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -72,10 +74,14 @@ const SignInButton: React.FC<SignInButtonProps> = (props) => {
   const handleLogout = () => {
     sessionStorage.removeItem("userToken");
     sessionStorage.removeItem("user");
+    sessionStorage.removeItem("cart");
     setUserState(() => ({
       authToken: "",
       firstName: "",
       userEmail: "",
+    }));
+    setCartState(() => ({
+      products: [],
     }));
     handleClose();
   };
@@ -159,16 +165,19 @@ const SignInButton: React.FC<SignInButtonProps> = (props) => {
   );
 };
 
-const CartButton: React.FC = () => (
-  <StyledLink to={"/cart"}>
-    <Badge badgeContent={4} color="error">
-      <ShoppingCartIcon sx={{ marginRight: 0.5 }} />
-    </Badge>
-    <Typography variant="subtitle1" fontWeight={600} fontSize={16} mt={0.5}>
-      Cart
-    </Typography>
-  </StyledLink>
-);
+const CartButton: React.FC = () => {
+  const { products } = useRecoilValue(cartState);
+  return (
+    <StyledLink to={"/cart"}>
+      <Badge badgeContent={products.length} color="error">
+        <ShoppingCartIcon sx={{ marginRight: 0.5 }} />
+      </Badge>
+      <Typography variant="subtitle1" fontWeight={600} fontSize={16} mt={0.5}>
+        Cart
+      </Typography>
+    </StyledLink>
+  );
+};
 
 // Styled Components ----------------------------------------------------------------
 

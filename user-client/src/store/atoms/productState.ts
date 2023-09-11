@@ -6,6 +6,8 @@ export interface Product {
   title: string;
   description: string;
   imageUrl: string;
+  mrp: number;
+  sell: number;
   quantity: number;
 }
 
