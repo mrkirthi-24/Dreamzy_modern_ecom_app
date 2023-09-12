@@ -19,7 +19,7 @@ const MyCartItems: React.FC<MyCartItemsProps> = ({ cartItems }) => {
   };
 
   return (
-    <Box bgcolor="#fff">
+    <Box bgcolor="#fff" mb={5}>
       <Typography fontSize="16px" fontWeight={900} padding={2}>
         MY CART ({cartItems.length} items)
       </Typography>

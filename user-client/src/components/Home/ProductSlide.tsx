@@ -78,7 +78,7 @@ const ProductSlide: React.FC<ProductSlideProps> = ({ title, timer }) => {
         swipeable={false}
         draggable={false}
         centerMode={true}
-        infinite={false}
+        infinite={true}
         autoPlay={false}
         autoPlaySpeed={2000}
         keyBoardControl={true}
