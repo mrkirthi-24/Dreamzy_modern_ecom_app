@@ -1,5 +1,6 @@
 import { styled, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { useEffect, useState } from "react";
 import { Product } from "../../store/atoms/productState";
 
 interface TotalAmountViewProps {
@@ -7,19 +8,38 @@ interface TotalAmountViewProps {
 }
 
 const TotalAmountView: React.FC<TotalAmountViewProps> = ({ cartItems }) => {
+  const [price, setPrice] = useState(0);
+  const [discount, setDiscount] = useState(0);
+
+  useEffect(() => {
+    totalAmount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartItems]);
+
+  const totalAmount = () => {
+    let price = 0,
+      discount = 0;
+    cartItems.map((item) => {
+      price += item.mrp;
+      discount += item.mrp - item.sell;
+    });
+    setPrice(price);
+    setDiscount(discount);
+  };
+
   return (
-    <Box>
+    <Box mb={5}>
       <Header>
         <Heading>PRICE DETAILS</Heading>
       </Header>
       <Container>
         <Typography>
           Price ({cartItems?.length} items)
-          <Price>00000</Price>
+          <Price>₹{price}</Price>
         </Typography>
         <Typography>
           Discount
-          <Price>000</Price>
+          <Price>₹{discount}</Price>
         </Typography>
         <Typography>
           Delivery Charges
@@ -27,9 +47,9 @@ const TotalAmountView: React.FC<TotalAmountViewProps> = ({ cartItems }) => {
         </Typography>
         <TotalAmount>
           Total Amount
-          <Price>₹3000</Price>
+          <Price>₹{price - discount}</Price>
         </TotalAmount>
-        <Discount>You will save ₹3000 on this order</Discount>
+        <Discount>You will save ₹{discount - 40} on this order</Discount>
       </Container>
     </Box>
   );
@@ -53,8 +73,7 @@ const Container = styled(Box)`
   padding: 15px 24px;
   background: #fff;
   & > p {
-    margin-bottom: 20px;
-    font-size: 14px;
+    margin-bottom: 15px;
   }
 `;
 
@@ -63,7 +82,7 @@ const Price = styled("span")`
 `;
 
 const TotalAmount = styled(Typography)`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   border-top: 1px solid #e0e0e0;
   padding: 20px 0;
@@ -71,7 +90,7 @@ const TotalAmount = styled(Typography)`
 `;
 
 const Discount = styled(Typography)`
-  font-size: 16px;
+  font-size: 18px;
   color: green;
 `;
 
