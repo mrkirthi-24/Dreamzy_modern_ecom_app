@@ -52,8 +52,8 @@ router.post(
         sell,
         quantity,
       }: productDetails = req.body;
+      
       const adminId = req.headers["authId"];
-
       const newProduct = {
         category,
         title,
