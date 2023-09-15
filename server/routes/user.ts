@@ -7,13 +7,17 @@ import express, { Request, Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import { Product, User } from "../db";
 import { authenticateJWT, SECRET_KEY } from "../middleware";
-import { userDetails } from "../types/types";
+import { userSchema } from "../types/types";
 
 const router: Router = Router();
 
 //SignUp User
 router.post("/signup", async (req: Request, res: Response) => {
-  const { username }: userDetails = req.body;
+  const parsedData = userSchema.safeParse(req.body);
+  if (!parsedData.success)
+    return res.status(404).json({ error: "Invalid Input provided." });
+
+  const username = parsedData.data.username;
   const admin = await User.findOne({ username });
   if (!admin) {
     const newUser = new User(req.body);
@@ -27,7 +31,11 @@ router.post("/signup", async (req: Request, res: Response) => {
 
 //Login User
 router.post("/login", async (req: Request, res: Response) => {
-  const { username, password }: userDetails = req.body;
+  const parsedData = userSchema.safeParse(req.body);
+  if (!parsedData.success)
+    return res.status(404).json({ error: "Invalid Input provided." });
+
+  const { username, password } = parsedData.data;
   const user = await User.findOne({ username, password });
   if (user) {
     const token = jwt.sign({ id: user._id }, SECRET_KEY, {

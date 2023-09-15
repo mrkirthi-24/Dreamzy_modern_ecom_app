@@ -6,13 +6,17 @@ import express, { Request, Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import { Admin, Product } from "../db";
 import { authenticateJWT, SECRET_KEY } from "../middleware";
-import { adminDetails, productDetails } from "../types/types";
+import { adminSchema, productSchema } from "../types/types";
 
 const router: Router = Router();
 
 //SignUp Admin
 router.post("/signup", async (req: Request, res: Response) => {
-  const { username }: adminDetails = req.body;
+  const parsedData = adminSchema.safeParse(req.body);
+  if (!parsedData.success)
+    return res.status(404).json({ error: "Invalid Input provided." });
+
+  const username = parsedData.data.username;
   const admin = await Admin.findOne({ username });
   if (!admin) {
     const newAdmin = new Admin(req.body);
@@ -26,7 +30,11 @@ router.post("/signup", async (req: Request, res: Response) => {
 
 //Login Admin
 router.post("/login", async (req: Request, res: Response) => {
-  const { username, password }: adminDetails = req.body;
+  const parsedData = adminSchema.safeParse(req.body);
+  if (!parsedData.success)
+    return res.status(404).json({ error: "Invalid Input provided." });
+
+  const { username, password } = parsedData.data;
   const admin = await Admin.findOne({ username, password });
   if (admin) {
     const token = jwt.sign({ id: admin._id }, SECRET_KEY, {
@@ -43,16 +51,12 @@ router.post(
   authenticateJWT,
   async (req: Request, res: Response) => {
     try {
-      const {
-        category,
-        title,
-        description,
-        imageUrl,
-        mrp,
-        sell,
-        quantity,
-      }: productDetails = req.body;
-      
+      const parsedData = productSchema.safeParse(req.body);
+      if (!parsedData.success)
+        return res.status(404).json({ error: "Invalid Input provided." });
+
+      const { category, title, description, imageUrl, mrp, sell, quantity } =
+        parsedData.data;
       const adminId = req.headers["authId"];
       const newProduct = {
         category,
