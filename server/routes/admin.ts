@@ -101,7 +101,11 @@ router.put(
     try {
       const productId = req.params.id;
       const adminId = req.headers["authId"];
-      const newProduct = req.body;
+      const parsedData = productSchema.safeParse(req.body);
+      if (!parsedData.success)
+        return res.status(404).json({ error: "Invalid Input provided." });
+
+      const newProduct = parsedData.data;
 
       const updatedProduct = await Product.findOneAndUpdate(
         { _id: productId, adminId },
