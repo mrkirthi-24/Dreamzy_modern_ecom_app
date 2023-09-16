@@ -21,9 +21,7 @@ const ItemActions: React.FC<ItemActionsProps> = ({ item, loading }) => {
       if (!existingProduct) {
         if (item != null) {
           const updatedCart = [...cart.products, item];
-          setCart(() => ({
-            products: updatedCart,
-          }));
+          setCart({ products: updatedCart });
           // Store the updated cart in sessionStorage
           sessionStorage.setItem("cart", JSON.stringify(updatedCart));
         }

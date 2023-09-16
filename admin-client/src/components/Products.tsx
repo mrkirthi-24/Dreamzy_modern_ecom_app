@@ -92,9 +92,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const { title, description, imageUrl, quantity, category, mrp, sell } =
     product;
+  const image = imageUrl
+    ? imageUrl
+    : "https://static-assets-web.flixcart.com/www/linchpin/batman-returns/images/fk-default-image-75ff340b.png?q=90";
   return (
     <Card sx={CardStyles}>
-      <CardMedia sx={{ height: 200 }} image={imageUrl} title={title} />
+      <CardMedia sx={{ height: 200 }} image={image} title={title} />
       <CardContent>
         <Typography
           gutterBottom

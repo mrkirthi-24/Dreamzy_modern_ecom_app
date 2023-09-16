@@ -88,26 +88,31 @@ const ProductSlide: React.FC<ProductSlideProps> = ({ title, timer }) => {
         dotListClass="custom-dot-list-style"
         itemClass="carousel-item-padding-40-px"
       >
-        {allproductState.products.map((product) => (
-          <Link
-            key={product._id}
-            to={`product/${product._id}`}
-            style={{ textDecoration: "none" }}
-          >
-            <Box
-              textAlign="center"
-              style={{
-                padding: "20px 10px",
-                border: "1px solid rgba(0,0,0,0.25)",
-                margin: 5,
-              }}
+        {allproductState.products.map((product) => {
+          const image = product.imageUrl
+            ? product.imageUrl
+            : "https://static-assets-web.flixcart.com/www/linchpin/batman-returns/images/fk-default-image-75ff340b.png?q=90";
+          return (
+            <Link
+              key={product._id}
+              to={`product/${product._id}`}
+              style={{ textDecoration: "none" }}
             >
-              <Image src={product.imageUrl} />
-              <Text style={{ fontWeight: 600 }}>{product.title}</Text>
-              <Text style={{ color: "green" }}>Upto 50% OFF</Text>
-            </Box>
-          </Link>
-        ))}
+              <Box
+                textAlign="center"
+                style={{
+                  padding: "20px 10px",
+                  border: "1px solid rgba(0,0,0,0.25)",
+                  margin: 5,
+                }}
+              >
+                <Image src={image} />
+                <Text style={{ fontWeight: 600 }}>{product.title}</Text>
+                <Text style={{ color: "green" }}>Upto 50% OFF</Text>
+              </Box>
+            </Link>
+          );
+        })}
       </Carousel>
     </Wrapper>
   );
@@ -142,8 +147,8 @@ const Timer = styled(Box)`
 `;
 
 const Image = styled("img")({
-  width: "auto",
-  height: 150,
+  maxWidth: 150,
+  height: 170,
 });
 
 const Text = styled(Typography)`

@@ -9,16 +9,19 @@ import ProductDetails from "./components/Products/ProductDetails";
 import Products from "./components/Products/Products";
 import SellerPage from "./components/SellerPage";
 import { cartState } from "./store/atoms/cartState";
+import { savelaterState } from "./store/atoms/savelaterState";
 import { userState } from "./store/atoms/userState";
 
 const App: React.FC = () => {
   const setUserState = useSetRecoilState(userState);
   const setCartState = useSetRecoilState(cartState);
+  const setSavedLater = useSetRecoilState(savelaterState);
 
   React.useEffect(() => {
     const authToken = sessionStorage.getItem("userToken");
     const firstName = sessionStorage.getItem("user");
     const updateCart = sessionStorage.getItem("cart");
+    const updateSaved = sessionStorage.getItem("saved");
     const validfirstName = firstName || "";
 
     setUserState((prevState) => ({
@@ -27,12 +30,11 @@ const App: React.FC = () => {
       firstName: validfirstName,
     }));
 
-    if (updateCart !== null) {
-      setCartState(() => ({
-        products: JSON.parse(updateCart),
-      }));
+    if (updateCart !== null && updateSaved !== null) {
+      setCartState({ products: JSON.parse(updateCart) });
+      setSavedLater({ products: JSON.parse(updateSaved) });
     }
-  }, [setUserState, setCartState]);
+  }, [setUserState, setCartState, setSavedLater]);
 
   return (
     <>

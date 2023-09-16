@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { singleItemState } from "../../store/atoms/singleItem";
+import { singleItemState } from "../../store/atoms/singleItemState";
 import ItemActions from "./ItemActions";
 import ItemDetails from "./ItemDetails";
 

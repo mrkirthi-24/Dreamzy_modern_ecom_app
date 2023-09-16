@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from "react";
-
+import { z } from "zod";
 import {
   Dialog,
   DialogContent,
@@ -44,6 +44,21 @@ interface LoginDialogProps {
   setOpen: (open: boolean) => void;
 }
 
+// Validation schema for login form
+const loginSchema = z.object({
+  username: z.string().email().min(5),
+  password: z.string().min(6),
+});
+
+// Validation schema for signup form
+// const signupSchema = z.object({
+//   firstname: z.string().min(2),
+//   lastname: z.string().min(2),
+//   phone: z.string().min(10),
+//   username: z.string().email().min(5),
+//   password: z.string().min(6),
+// });
+
 const LoginDialog: React.FC<LoginDialogProps> = ({ open, setOpen }) => {
   const [login, setLogin] = useState(loginInitialValues);
   const [signup, setSignup] = useState(signupInitialValues);
@@ -74,26 +89,33 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, setOpen }) => {
   const handleLogin = () => {
     const loginUser = async () => {
       try {
-        const response = await axios.post("http://localhost:3000/user/login", {
-          ...login,
-        });
+        const loginData = loginSchema.safeParse(login);
+        if (loginData.success === true) {
+          const response = await axios.post(
+            "http://localhost:3000/user/login",
+            {
+              ...loginData,
+            }
+          );
 
-        const data = response.data;
-        if (data.token) {
-          sessionStorage.setItem("userToken", data.token);
-          sessionStorage.setItem("user", data.firstname);
-          setUser(() => ({
-            authToken: data.token,
-            userEmail: login.username,
-            firstName: data.firstname,
-          }));
-          handleClose();
+          const data = response.data;
+          if (data.token) {
+            sessionStorage.setItem("userToken", data.token);
+            sessionStorage.setItem("user", data.firstname);
+            setUser(() => ({
+              authToken: data.token,
+              userEmail: login.username,
+              firstName: data.firstname,
+            }));
+            handleClose();
+          }
+        } else {
+          console.error("Validation error");
         }
       } catch (error) {
         console.error("Error login user:", error);
       }
     };
-
     loginUser();
   };
 
@@ -146,6 +168,10 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, setOpen }) => {
                 onChange={(e) => onValueChange(e)}
                 name="username"
                 label="Enter Email/Mobile number"
+                // error={!!error && error.field === "username"}
+                // helperText={
+                //   !!error && error.field === "username" && error.message
+                // }
                 autoFocus
               />
               <TextField

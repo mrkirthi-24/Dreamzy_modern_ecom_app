@@ -9,19 +9,26 @@ import {
   ListItem,
   styled,
 } from "@mui/material";
+import { z, ZodError } from "zod";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { productState } from "../../store/atoms/productState";
+
+const searchSchema = z.string();
 
 export const Search: React.FC = () => {
   const [searchText, setSearchText] = React.useState("");
   const [open, setOpen] = React.useState(true);
   const { products } = useRecoilValue(productState);
-  console.log(products);
 
   const getText = (text: string) => {
-    setSearchText(text);
-    setOpen(false);
+    try {
+      searchSchema.safeParse(text);
+      setSearchText(text);
+      setOpen(false);
+    } catch (error) {
+      if (error instanceof ZodError) console.error(error.message);
+    }
   };
 
   const handleClickAway = () => setOpen(true);
