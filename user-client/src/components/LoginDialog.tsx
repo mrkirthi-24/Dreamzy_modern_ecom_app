@@ -93,9 +93,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, setOpen }) => {
         if (loginData.success === true) {
           const response = await axios.post(
             "http://localhost:3000/user/login",
-            {
-              ...loginData,
-            }
+            { ...loginData.data }
           );
 
           const data = response.data;

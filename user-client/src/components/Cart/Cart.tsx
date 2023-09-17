@@ -1,4 +1,5 @@
 import { Box, Button, Grid, styled } from "@mui/material";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { cartState } from "../../store/atoms/cartState";
@@ -12,8 +13,12 @@ const Cart = () => {
   const cart = useRecoilValue(cartState);
   const savedLater = useRecoilValue(savelaterState);
   const navigate = useNavigate();
-
   const handleClick = () => navigate("/confirmorder");
+
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Box bgcolor="#f2f2f2">
