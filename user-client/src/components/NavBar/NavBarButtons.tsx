@@ -31,13 +31,13 @@ const NavBarButtons: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <Box display="flex" alignItems="center" ml={5}>
+    <ResponsiveContainer ml={5}>
       <SellerButton />
       <SignInButton setOpen={setOpen} />
       <CartButton />
       <ToggleMode />
       <LoginDialog open={open} setOpen={setOpen} />
-    </Box>
+    </ResponsiveContainer>
   );
 };
 
@@ -46,7 +46,13 @@ export default NavBarButtons;
 const SellerButton: React.FC = () => (
   <StyledLink to={"/sellerportal"}>
     <LocalMallIcon sx={{ mr: 0.5, mt: 0.5 }} />
-    <Typography variant="subtitle1" fontWeight={600} fontSize={16} mt={0.7}>
+    <Typography
+      className="icon-text"
+      variant="subtitle1"
+      fontWeight={600}
+      fontSize={16}
+      mt={0.7}
+    >
       Become a seller
     </Typography>
   </StyledLink>
@@ -103,7 +109,13 @@ const SignInButton: React.FC<SignInButtonProps> = (props) => {
         onMouseEnter={handleClick}
       >
         <PersonIcon sx={{ mr: 0.5 }} />
-        <Typography variant="subtitle1" fontWeight={600} fontSize={16} mt={0.5}>
+        <Typography
+          className="icon-text"
+          variant="subtitle1"
+          fontWeight={600}
+          fontSize={16}
+          mt={0.5}
+        >
           {authToken ? userFirstName : "Sign in"}
         </Typography>
         <KeyboardArrowDownIcon />
@@ -172,7 +184,13 @@ const CartButton: React.FC = () => {
       <Badge badgeContent={products.length} color="error">
         <ShoppingCartIcon sx={{ marginRight: 0.5 }} />
       </Badge>
-      <Typography variant="subtitle1" fontWeight={600} fontSize={16} mt={0.5}>
+      <Typography
+        className="icon-text"
+        variant="subtitle1"
+        fontWeight={600}
+        fontSize={16}
+        mt={0.5}
+      >
         Cart
       </Typography>
     </StyledLink>
@@ -195,6 +213,16 @@ const StyledButton = styled(Button)`
   align-items: center;
   text-transform: none;
 `;
+
+const ResponsiveContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  ".icon-text": {
+    [theme.breakpoints.down("lg")]: {
+      display: "none",
+    },
+  },
+}));
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
