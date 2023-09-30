@@ -13,15 +13,10 @@ const NavBar: React.FC = () => {
         <ResponsiveBar>
           <a href="/" style={{ color: "White" }}>
             <Box sx={{ fontWeight: 900, fontSize: 25 }}>
-              <p>Wh*tTf!</p>
-              <Typography
-                color="yellow"
-                variant="subtitle1"
-                marginTop={-2}
-                textAlign="center"
-              >
+              <p>Dre*mzy</p>
+              <StyledTypo>
                 <em>World</em>
-              </Typography>
+              </StyledTypo>
             </Box>
           </a>
 
@@ -47,4 +42,10 @@ const ResponsiveBar = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
+const StyledTypo = styled(Typography)`
+  color: yellow;
+  variant: subtitle1;
+  margin-top: -1em;
+  text-align: center;
+`
 export default NavBar;
