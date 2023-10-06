@@ -20,6 +20,14 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
     "https://rukminim1.flixcart.com/lockin/774/185/images/CCO__PP_2019-07-14.png?q=50";
 
   const date = new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000);
+
+  const offerDescriptions = [
+    "Bank Offer 5% Unlimited Cashback on Flipkart Axis Bank Credit Card",
+    "Bank Offer 10% Off on Bank of Baroda Mastercard debit card first time transaction, Terms and Condition apply",
+    "Purchase this Furniture or Appliance and Get Extra ₹500 Off on Select ACs",
+    "Partner OfferExtra 10% off upto ₹500 on next furniture purchase"
+  ];
+
   return (
     <Box padding={5}>
       <Typography variant="h5">{item?.title}</Typography>
@@ -63,25 +71,13 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
 
       <Typography>Available offers</Typography>
       <SmallText>
-        <Typography>
+      {offerDescriptions.map((description, index) => (
+        <Typography key={index}>
           <StyledBadge />
-          Bank Offer 5% Unlimited Cashback on Flipkart Axis Bank Credit Card
+          {description}
         </Typography>
-        <Typography>
-          <StyledBadge />
-          Bank Offer 10% Off on Bank of Baroda Mastercard debit card first time
-          transaction, Terms and Condition apply
-        </Typography>
-        <Typography>
-          <StyledBadge />
-          Purchase this Furniture or Appliance and Get Extra ₹500 Off on Select
-          ACs
-        </Typography>
-        <Typography>
-          <StyledBadge />
-          Partner OfferExtra 10% off upto ₹500 on next furniture purchase
-        </Typography>
-      </SmallText>
+      ))}
+    </SmallText>
       <Table>
         <TableBody>
           <ColumnText>
