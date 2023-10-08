@@ -16,13 +16,12 @@ app.use(cors());
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
 
-const URL = process.env.DATABASE_URL;
 
-if (!URL) {
+if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL variable is not defined.");
 }
 
-mongoose.connect(URL, {
+mongoose.connect(process.env.DATABASE_URL, {
   dbName: "Ecommerce_App",
 });
 
