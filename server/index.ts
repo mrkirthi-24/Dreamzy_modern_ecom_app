@@ -4,18 +4,23 @@ import adminRoute from "./routes/admin";
 import userRoute from "./routes/user";
 import cors from "cors";
 import dotenv from "dotenv";
-const PORT = 3000;
-
-const app = express();
 dotenv.config();
 
+const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+  origin: ["http://localhost:5173", "http://localhost:5174"],
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 //Routes
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
-
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL variable is not defined.");
