@@ -24,13 +24,13 @@ type UserType = z.infer<typeof userSchema>;
 
 // Product Schema and Type
 const productSchema = z.object({
-  category: z.string().min(3).max(20),
-  title: z.string().min(5).max(50),
-  description: z.string().max(100).optional(),
-  imageUrl: z.string().optional(),
+  category: z.string(),
+  title: z.string(),
+  description: z.string().optional(),
   mrp: z.number(),
   sell: z.number(),
   quantity: z.number(),
+  imageUrl: z.string().optional(),
 });
 
 type ProductType = z.infer<typeof productSchema>;
