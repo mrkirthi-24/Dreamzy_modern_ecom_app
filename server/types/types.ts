@@ -27,9 +27,9 @@ const productSchema = z.object({
   category: z.string(),
   title: z.string(),
   description: z.string().optional(),
-  mrp: z.number(),
-  sell: z.number(),
-  quantity: z.number(),
+  mrp: z.string(),
+  sell: z.string(),
+  quantity: z.string(),
   imageUrl: z.string().optional(),
 });
 
