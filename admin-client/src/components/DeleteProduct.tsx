@@ -35,7 +35,7 @@ const DeleteProduct: React.FC<Props> = ({ productId }) => {
       try {
         await axios({
           method: "DELETE",
-          url: `http://localhost:3000/admin/product/${productId}`,
+          url: `${import.meta.env.VITE_BASE_URL}/product/${productId}`,
           headers: {
             Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",

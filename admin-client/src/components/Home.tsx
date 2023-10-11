@@ -22,7 +22,7 @@ const Home = () => {
         <Grid item xs={4}>
           <Paper elevation={10} sx={HeadingStyles}>
             <Typography variant="h4" fontWeight={600} fontSize={50}>
-              Welcome to world's best ecommerce platform
+              Welcome to world's largest ecommerce platform
             </Typography>
           </Paper>
         </Grid>

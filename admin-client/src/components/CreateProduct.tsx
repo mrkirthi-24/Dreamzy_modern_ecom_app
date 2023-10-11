@@ -23,6 +23,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authTokenState } from "../store/selectors/authToken";
 import { productsState } from "../store/atoms/products";
 import { snackbarState } from "../store/atoms/snackbar";
+import { calculateDiscount } from "../utils/calculateDiscount";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -43,13 +44,6 @@ const productInitialValues = {
   quantity: 0,
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
-export function calculateDiscount(mrp: number, sell: number) {
-  if (mrp === 0 || sell === 0) return 0;
-  const discount = (mrp - sell) / mrp;
-  return Math.round(discount * 100);
-}
-
 const CreateProductDialog: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [productDetails, setProductDetails] = useState(productInitialValues);
@@ -60,7 +54,12 @@ const CreateProductDialog: React.FC = () => {
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
+    let parsedValue: (string | number) = e.target.value;
+
+    if (e.target.name === "quantity" || e.target.name === "mrp" || e.target.name === "sell") {
+      parsedValue = parseFloat(e.target.value);
+  }
+    setProductDetails({ ...productDetails, [e.target.name]: parsedValue });
   };
 
   const handleClickOpen = () => {
@@ -74,7 +73,7 @@ const CreateProductDialog: React.FC = () => {
   const handleSubmit = () => {
     const createData = async () => {
       try {
-        await axios("http://localhost:3000/admin/createproduct", {
+        await axios(`${import.meta.env.VITE_BASE_URL}/createproduct`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${authToken}`,

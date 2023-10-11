@@ -65,11 +65,10 @@ export default function SignUp() {
     const fetchData = async () => {
       try {
         await axios
-          .post("http://localhost:3000/admin/signup", {
+          .post(`${import.meta.env.VITE_BASE_URL}/signup`, {
             fullname: firstname + " " + lastname,
             username: email,
-            password: password,
-            // signupInput,
+            password: password,            
           })
           .then((response) => {
             const data = response.data;

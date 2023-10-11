@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { adminState } from "../store/atoms/admin";
 import { CopyrightProps } from "./types";
+import { snackbarState } from "../store/atoms/snackbar";
 
 const Copyright: React.FC<CopyrightProps> = (props) => {
   return (
@@ -36,6 +37,7 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const setAdminState = useSetRecoilState(adminState);
+  const setAlert = useSetRecoilState(snackbarState);
   const navigate = useNavigate();
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
@@ -43,7 +45,7 @@ export default function SignIn() {
     const fetchData = async () => {
       try {
         await axios
-          .post("http://localhost:3000/admin/login", {
+          .post(`${import.meta.env.VITE_BASE_URL}/login`, {
             username: email,
             password: password,
           })
@@ -56,6 +58,11 @@ export default function SignIn() {
                 ...prevState,
                 authToken: data.token,
                 adminEmail: email,
+              }));
+              setAlert((prevState) => ({
+                ...prevState,
+                open: true,
+                message: "User loggedIn successfully",
               }));
             }
           })

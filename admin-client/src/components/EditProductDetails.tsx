@@ -11,7 +11,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { productsState } from "../store/atoms/products";
 import { EditProductDialogsProps } from "./types";
 import { snackbarState } from "../store/atoms/snackbar";
-import { calculateDiscount } from "./CreateProduct";
+import { calculateDiscount } from "../utils/calculateDiscount";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -42,7 +42,12 @@ const EditProductDialog: React.FC<EditProductDialogsProps> = ({ product }) => {
   const onInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setEditProduct({ ...editProduct, [e.target.name]: e.target.value });
+    let parsedValue: (string | number) = e.target.value;
+
+    if (e.target.name === "quantity" || e.target.name === "mrp" || e.target.name === "sell") {
+      parsedValue = parseFloat(e.target.value);
+  }
+    setEditProduct({ ...editProduct, [e.target.name] : parsedValue });
   };
 
   const handleClickOpen = () => {
@@ -56,9 +61,8 @@ const EditProductDialog: React.FC<EditProductDialogsProps> = ({ product }) => {
   const handleSubmit = () => {
     const editData = async () => {
       try {
-        await axios({
+        await axios(`${import.meta.env.VITE_BASE_URL}/product/${product._id}`, {
           method: "PUT",
-          url: `http://localhost:3000/admin/product/${product._id}`,
           headers: {
             Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",

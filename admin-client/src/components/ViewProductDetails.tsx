@@ -49,7 +49,7 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 
 export default function CustomizedDialogs(props: CustomizedDialogsProps) {
   const [open, setOpen] = React.useState(false);
-  const { category, title, description, imageUrl, quantity } = props.product;
+  const { category, title, description, imageUrl, quantity, mrp, sell } = props.product;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -84,8 +84,12 @@ export default function CustomizedDialogs(props: CustomizedDialogsProps) {
               <Paper sx={{ marginBottom: 2 }}>
                 <b>Description:</b> {description}
               </Paper>
-              <Paper sx={{ marginBottom: 2 }}>
-                <b>Quantity:</b> {quantity}
+              <Paper sx={{ marginBottom: 2, padding: 1, lineHeight: 2 }}>
+                <b>QTY:</b> {quantity}
+                <br />
+                <b>MRP:</b> {mrp}
+                <br />
+                <b>SELL:</b> {sell}
               </Paper>
             </Grid>
             <Grid
