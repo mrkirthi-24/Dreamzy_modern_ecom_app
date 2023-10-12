@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 import Home from "./components/Home/Home";
 import Navbar from "./components/NavBar/Navbar";
 import ProductDetails from "./components/Products/ProductDetails";
-import Products from "./components/Products/Products";
 import SellerPage from "./components/SellerPage";
 import { cartState } from "./store/atoms/cartState";
 import { savelaterState } from "./store/atoms/savelaterState";
@@ -43,7 +42,6 @@ const App: React.FC = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
           <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/sellerportal" element={<SellerPage />} />
