@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://modern-ecomm-app.vercel.app"],
+  origin: ["http://localhost:5173", "https://modern-ecomm-app.vercel.app", "https://user-ecomm-app-v1.vercel.app"],
   optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
