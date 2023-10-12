@@ -13,7 +13,7 @@ import Divider from "@mui/material/Divider";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Badge, Button } from "@mui/material";
 import LoginDialog from "../LoginDialog";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -61,6 +61,7 @@ const SellerButton: React.FC = () => (
 const SignInButton: React.FC<SignInButtonProps> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
   const authToken = useRecoilValue(authTokenState);
   const userFirstName = useRecoilValue(userFirstNameState);
   const setUserState = useSetRecoilState(userState);
@@ -79,6 +80,7 @@ const SignInButton: React.FC<SignInButtonProps> = (props) => {
 
   const handleLogout = () => {
     sessionStorage.removeItem("userToken");
+    sessionStorage.removeItem("saved");
     sessionStorage.removeItem("user");
     sessionStorage.removeItem("cart");
     setUserState(() => ({
@@ -90,6 +92,7 @@ const SignInButton: React.FC<SignInButtonProps> = (props) => {
       products: [],
     }));
     handleClose();
+    navigate("/")
   };
 
   const handleMenuItemClick = () => {

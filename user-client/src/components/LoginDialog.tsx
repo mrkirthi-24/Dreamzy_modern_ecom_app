@@ -92,7 +92,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, setOpen }) => {
         const loginData = loginSchema.safeParse(login);
         if (loginData.success === true) {
           const response = await axios.post(
-            "http://localhost:3000/user/login",
+            `${import.meta.env.VITE_BASE_URL}/login`,
             { ...loginData.data }
           );
 
@@ -121,7 +121,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, setOpen }) => {
     const signupUser = async () => {
       try {
         await axios
-          .post("http://localhost:3000/user/signup", {
+          .post(`${import.meta.env.VITE_BASE_URL}/signup`, {
             fullname: signup.firstname + " " + signup.lastname,
             ...signup,
           })

@@ -1,7 +1,7 @@
 import { Box, Button, Grid, styled } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "../../store/atoms/cartState";
 import { savelaterState } from "../../store/atoms/savelaterState";
 import EmptyCart from "./EmptyCart";
@@ -10,10 +10,14 @@ import SaveforLater from "./SaveforLater";
 import TotalAmountView from "./TotalAmountView";
 
 const Cart = () => {
-  const cart = useRecoilValue(cartState);
+  const [cart, setCartState] = useRecoilState(cartState);
   const savedLater = useRecoilValue(savelaterState);
   const navigate = useNavigate();
-  const handleClick = () => navigate("/confirmorder");
+  const handleClick = () => {
+    setCartState({ products: [] });
+    sessionStorage.setItem("cart", "");
+    navigate("/confirmorder")
+  };
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts

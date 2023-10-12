@@ -7,6 +7,8 @@ const SellerPage = () => {
       flexDirection="column"
       justifyContent="center"
       height="100vh"
+      mt={-11}
+      mb={15}
     >
       <Typography
         variant="h3"
@@ -15,8 +17,7 @@ const SellerPage = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        mt={3}
-        mb={7}
+        mb={2}
       >
         Sell Online with Us &nbsp;
         <img
@@ -24,8 +25,14 @@ const SellerPage = () => {
           alt=""
           height={100}
           width={100}
-        />
+        />  
       </Typography>
+      <Typography
+       variant="h3"
+       textAlign="center"
+       fontWeight={600}
+       >
+        <a href="https://modern-ecomm-app.vercel.app/"><u>Click here</u></a> &nbsp;to go to seller portal</Typography>
     </Box>
   );
 };

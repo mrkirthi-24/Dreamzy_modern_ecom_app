@@ -19,7 +19,7 @@ const ProductSlide: React.FC<ProductSlideProps> = ({ title, timer }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await axios.get("http://localhost:3000/user/products");
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/products`);
       setProductState(() => ({ products: response.data }));
     };
     fetchProducts();
