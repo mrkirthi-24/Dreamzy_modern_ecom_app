@@ -1,6 +1,8 @@
 # modern_ecomm_app
 
 # Dreamzy: A full-stack ecommerce app that caters to both buyers and sellers
+Frontend Deployed on Vercel
+Backend Deployed on Fly.io
 
 ## Admin (seller) App:
 Link: (https://modern-ecomm-app.vercel.app/)
@@ -22,3 +24,9 @@ Link: (https://user-ecomm-app-v1.vercel.app/)
 - [JWT authentication]
 
 ## Future Enhancements
+
+- Migrate to Next.js
+- Create a turbo monorepo of this application
+- Authenticate using Auth.js (OAuth2.0)
+- Replace MongoDB with PostgreSQL and Prisma ORM
+- Containerize the application using Docker
