@@ -1,5 +1,3 @@
-# modern_ecomm_app
-
 # Dreamzy: A full-stack ecommerce app that caters to both buyers and sellers
 Frontend Deployed on Vercel
 Backend Deployed on Fly.io
