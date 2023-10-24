@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Box, IconButton, styled, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, IconButton, Skeleton, styled, Typography } from "@mui/material";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { productState } from "../../store/atoms/productState";
@@ -16,10 +16,13 @@ interface ProductSlideProps {
 
 const ProductSlide: React.FC<ProductSlideProps> = ({ title, timer }) => {
   const [allproductState, setProductState] = useRecoilState(productState);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/products`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/products`
+      );
       setProductState(() => ({ products: response.data }));
     };
     fetchProducts();
@@ -100,13 +103,28 @@ const ProductSlide: React.FC<ProductSlideProps> = ({ title, timer }) => {
             >
               <Box
                 textAlign="center"
-                style={{
-                  padding: "20px 10px",
-                  border: "1px solid rgba(0,0,0,0.25)",
-                  margin: 5,
-                }}
+                padding="20px 10px"
+                border="1px solid rgba(0,0,0,0.25)"
+                m={1}
               >
-                <Image src={image} />
+                {!imageLoaded && (
+                  <Skeleton
+                    variant="rectangular"
+                    animation="wave"
+                    width="150px"
+                    height="170px"
+                  />
+                )}
+                <Image
+                  src={image}
+                  onLoad={() => {
+                    setImageLoaded(true);
+                  }}
+                  style={{
+                    display: imageLoaded ? "block" : "none",
+                    width: "100%",
+                  }}
+                />
                 <Text style={{ fontWeight: 600 }}>{product.title}</Text>
                 <Text style={{ color: "green" }}>Upto 50% OFF</Text>
               </Box>
